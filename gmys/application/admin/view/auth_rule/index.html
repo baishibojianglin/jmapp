@@ -1,0 +1,172 @@
+{include file="public/_meta" /}
+</head>
+<body class="layui-view-body">
+<div class="layui-content">
+    <div class="layui-page-header" >
+        <div class="pagewrap">
+            <span class="layui-breadcrumb">
+                <a href="">首页</a>
+                <a href="">管理用户</a>
+                <a><cite>权限规则</cite></a>
+            </span>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-card">
+            <div class="layui-card-header">权限规则列表</div>
+            <div class="layui-card-body">
+                <script type="text/html" id="toolbar">
+                    <div class="form-box">
+                        <div class="layui-form layui-form-item">
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-blue"  onclick="location.href='{:url("admin/auth_rule/create")}'" ><i class="layui-icon">&#xe654;</i>新增</button>
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-form-mid">规则名称</div>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="text" name="title" value="" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">规则</div>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="text" name="name" value="" autocomplete="off" class="layui-input">
+                                </div>
+                                <button class="layui-btn layui-btn-blue" onclick="layuiTable()">查询</button>
+                                <!--<button class="layui-btn layui-btn-primary">重置</button>-->
+                            </div>
+                        </div>
+                    </div>
+                </script>
+                <table class="layui-hide" id="layui_table" lay-filter="lay_filter_table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="__STATIC__/layui/layui.all.js"></script>
+<script src="__STATIC__/common/js/common.js"></script>
+<script>
+
+    // 页面加载时执行
+    layuiTable();
+
+    /**
+     * layui.table 数据表格：初始化渲染方式为方法渲染
+     */
+    function layuiTable() {
+        layui.use('table', function () {
+
+            var table = layui.table;
+
+            // 方法级渲染
+            table.render({
+                elem: '#layui_table'
+                , cols: [[ //表头
+                    {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                    , {field: 'title', title: '规则名称', cellMinWidth: 120}
+                    , {field: 'name', title: '权限规则', cellMinWidth: 120}
+                    , {field: 'type', title: '规则类型', width: 90}
+                    , {field: 'pid', title: '上级ID', width: 80}
+                    , {field: 'level', title: '级别', width: 80}
+                    , {field: 'icon', title: '图标', width: 80, templet: '<div>{{#  if(d.icon){ }}<i class="layui-icon">{{d.icon}}</i>{{#  } }}</div>'
+                    } // {{d.字段名}} 是固定写法，此处 d 代表 res.data（但是不能用 res.data ）
+                    , {field: 'sort', title: '排序', width: 80}
+                    , {title: '操作', fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+                ]]
+                , url: '{:url("admin/auth_rule/getAuthRule")}' //数据接口
+                //,method: 'get' // 接口http请求类型，默认：get
+                ,where: {name: $('input[name="name"]').val(), title: $('input[name="title"]').val()} // 接口的其它参数，此处为搜索条件
+                //,contentType: 'application/x-www-form-urlencoded'
+                , parseData: function (res) { //res 即为原始返回的数据
+                    //console.log(res);
+                    return {
+                        "code": res.status, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.length, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                }
+                , response: { // 自定义数据响应名称
+                    //statusName: 'status' //规定数据状态的字段名称，默认：code
+                    statusCode: 1 //规定成功的状态码，默认：0
+                    //,msgName: 'hint' //规定状态信息的字段名称，默认：msg
+                    //,countName: 'total' //规定数据总数的字段名称，默认：count
+                    //,dataName: 'rows' //规定数据列表的字段名称，默认：data
+                }
+                //, id: 'layui_table'
+                , toolbar: '#toolbar' //'<div>权限规则列表</div>'
+                //,height: 312 // 设定容器高度
+                //,page: true //开启分页
+            });
+
+            // 监听工具条
+            table.on('tool(lay_filter_table)', function(obj){ //注：tool 是工具条事件名，lay_filter_table 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+                if(layEvent === 'detail'){ //查看
+                    //do somehing
+                } else if(layEvent === 'del'){ //删除
+                    layer.confirm('真的删除行么', function(index){
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                        //向服务端发送删除指令
+                        ajaxRequest('{:url("admin/auth_rule/delete")}', 'delete', {id: data.id}); // ajax请求
+                    });
+                } else if(layEvent === 'edit'){ //编辑
+                    //do something
+                    console.log(data);
+                    layer.open({
+                        type: 2,
+                        title: '编辑',
+                        //skin: 'layui-layer-rim', //加上边框
+                        area: ['420px', '240px'], //宽高
+                        content: '{:url("admin/auth_rule/edit")}?id=' + data.id,
+                        maxmin: true
+                    });
+//                    var _data = data.field;
+//                    var url = "{:url('Login/check')}";
+//                    ajaxRequest(url, _data);
+
+                    //同步更新缓存对应的值
+                    obj.update({
+                        name: '123'
+                        ,title: 'xxx'
+                    });
+                } else if(layEvent === 'LAYTABLE_TIPS'){
+                    layer.alert('Hi，头部工具栏扩展的右侧图标。');
+                }
+            });
+
+            // 表格重载（与 table.render 的 where 参数二选一）
+            /*table.reload('layui_table', {
+                where: { //设定异步数据接口的额外参数，任意设
+                    name: $('input[name="name"]').val() //'admin/Index/index'
+                    , title: $('input[name="title"]').val()
+                    //…
+                }
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            }); //只重载数据*/
+
+        });
+    }
+</script>
+
+<!--toolbar - 绑定工具条模板，它可以存放在页面的任意位置 s-->
+<script type="text/html" id="barDemo">
+    <!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>--><!--注意：属性 lay-event="" 是模板的关键所在，值可随意定义。-->
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.auth > 2){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+    {{#  } }}
+</script>
+<!--toolbar - 绑定工具条模板 e-->
+
+</body>
+</html>
