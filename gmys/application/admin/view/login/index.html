@@ -1,0 +1,144 @@
+{include file="public/_meta" /}
+<link rel="stylesheet" href="__STATIC__/layui_admin/css/login.css">
+</head>
+<body class="login-wrap">
+
+<div class="login-container">
+    <form class="login-form layui-form">
+        <div class="input-group">
+            <input type="text" name="admin_name" id="username" class="input-field" required lay-verify="required|username" autocomplete="off">
+            <label for="username" class="input-label">
+                <span class="label-title"><i class="layui-icon">&#xe66f;</i> 用户名</span>
+            </label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="password" id="password" class="input-field" required lay-verify="required|password" autocomplete="off">
+            <label for="password" class="input-label">
+                <span class="label-title"><i class="layui-icon">&#xe673;</i> 密码</span>
+            </label>
+        </div>
+
+        <div class="input-group">
+            <input type="text" name="captcha" id="captcha" class="input-field" required lay-verify="required|captcha" autocomplete="off">
+            <label for="captcha" class="input-label">
+                <span class="label-title"><i class="layui-icon layui-icon-vercode"><!--&#xe679;--></i> 验证码</span>
+            </label>
+
+        </div>
+        <div class="layui-col-md-offset5">
+            <img src="/index.php/captcha" alt="" title="点击刷新验证码" id="captcha_img" onclick="reloadcode(this)">
+        </div>
+
+        <button class="login-button" lay-submit lay-filter="formDemo">登 录<i class="ai ai-enter"></i></button>
+    </form>
+</div>
+
+{include file="public/_footer" /}
+<!--<script src="__STATIC__/layui_admin/js/index.js" data-main="login"></script>-->
+<script src="__STATIC__/layui_admin/js/login.js"></script>
+
+<script type="text/javascript">
+
+    /**
+     * 刷新验证码
+     * @param obj
+     */
+    function reloadcode(obj) {
+        obj.src = '/index.php/captcha?id=' + Math.random();
+    }
+
+    layui.use('form', function(){
+        var form = layui.form;
+
+        // 表单验证：自定义验证规则
+        form.verify({
+            username: function(value, item){ // value：表单的值、item：表单的DOM对象
+                if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                    return '用户名不能有特殊字符';
+                }
+                if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                    return '用户名首尾不能出现下划线\'_\'';
+                }
+                if(/^\d+\d+\d$/.test(value)){
+                    return '用户名不能全为数字';
+                }
+            }
+
+            //我们既支持上述函数式的方式，也支持下述数组的形式
+            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+            ,password: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ]
+
+            ,captcha: [
+                /^[\S]{4}$/
+                ,'验证码必须4位，且不能出现空格'
+            ]
+        });
+
+        // 监听提交
+        form.on('submit(formDemo)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+
+            /*ajax请求 s*/
+            // TODO：在 /public/static/ 目录下新建 common.js 文件，封装公用 ajax 方法
+            var _data = data.field;
+            var url = "{:url('Login/check')}";
+            ajaxRequest(url, 'post', _data);
+//            $.ajax({
+//                url: url,
+//                type: 'post',
+//                data: _data,
+//
+//                // 请求发送前的回调函数，用来修改请求发送前jqXHR（在 jQuery 1.4.x 中的 XMLHttpRequest）对象，此功能用来设置自定义 HTTP 头信息等。
+//                beforeSend: function (jqXHR, settings) {
+//                    this.layerIndex = layer.msg('请求中…', {
+//                        icon: 16,
+//                        shade: 0.01
+//                    }); //layer.load(0, { shade: [0.5, '#393D49'] });
+//
+//                    // 禁用按钮防止重复提交
+//                    //$("button").attr({ disabled: "disabled" });
+//                },
+//
+//                // 请求成功后的回调函数。这个函数传递3个参数：从服务器返回的数据（并根据dataType参数进行处理后的数据），一个描述状态的字符串，还有 jqXHR（在jQuery 1.4.x前为XMLHttpRequest）对象。
+//                success: function (data, textStatus, jqXHR) {
+//                    if(data.status != 1){ // 执行 error:function(){}，由于后台返回的HTTP状态码导致
+//                        layer.msg(data.message, {icon: 5, time: 1000}); // 失败的表情
+//                        return;
+//                    }else if(data.status == 1){
+//                        layer.msg(data.message, {
+//                            icon: 1, // 成功的表情
+//                            time: 1000 // 1秒关闭（如果不配置，默认是3秒）
+//                        }, function(){
+//                            window.location.replace(data.data.url);
+//                        });
+//                    }
+//                },
+//
+//                // 请求失败时调用此函数（默认: 自动判断 xml 或 html）。3个参数：jqXHR (在 jQuery 1.4.x 前为 XMLHttpRequest) 对象，错误信息，（可能）捕获的异常对象。
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    layer.msg(jqXHR.responseJSON.message, {icon: 5, time: 1000});
+//
+//                    /*// 刷新验证码：如果后台（在判断账号、密码前）先判断验证码，则需要刷新验证码；否则即不刷新的话，在第一次验证码通过后，但是当账号或密码出错时，后台验证码已改变
+//                    $('#captcha_img').attr('src', '/index.php/captcha'); // jquery修改img的src值
+//                    //console.log($('#captcha_img')[0].src); // jquery获取img的src值*/
+//                },
+//
+//                // 请求完成后回调函数 (请求成功或失败时均调用)。2个参数：jqXHR（jQuery 1.4.x 中是 XMLHttpRequest）对象，一个描述请求状态的字符串("success", "notmodified", "error", "timeout", "abort", 或者 "parsererror") 。
+//                complete: function (jqXHR, textStatus) {
+//                    layer.close(this.layerIndex);
+//                }
+//            });
+            /*ajax请求 e*/
+
+            return false; // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+
+</script>
+
+</body>
+</html>

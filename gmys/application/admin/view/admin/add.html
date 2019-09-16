@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<form action="{:url('Admin/add')}" method="post">
+    <div>
+        <label>用户组
+        <select name="group_id" id="">
+            {foreach name='authGroupList' item='vo'}
+            <option value="{$vo.id}">{$vo.title}</option>
+            {/foreach}
+        </select>
+        </label>
+    </div>
+    <div>
+        <label>管理员名称 <input type="text" name="admin_name"></label>
+    </div>
+    <div>
+        <label>密码 <input type="password" name="password"></label>
+    </div>
+    <div>
+        <input type="submit">
+    </div>
+</form>
+</body>
+</html>

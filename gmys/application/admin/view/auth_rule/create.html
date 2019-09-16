@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div>
+    <a href="javascript:history.go(-1)">返回</a>
+    <form action="{:url('admin/auth_rule/save')}" method="post">
+        <label for="">规则名称<input type="text" name="title" value=""></label><br>
+        <label for="">规则<input type="text" name="name" value=""></label><br>
+        <label for="">规则类型<input type="text" name="type" value=""></label><br>
+        <label for="">规则所属模块<input type="text" name="module" value="admin"></label><br>
+        <label for="">上级ID<input type="number" name="pid" value=""></label><br>
+        <label for="">图标<input type="text" name="icon" value=""></label><br>
+        <label for="">同级排序<input type="number" name="sort" value=""></label><br>
+        <input type="submit">
+    </form>
+</div>
+
+{include file="public/_footer" /}
+<script>
+    function aa(){
+        ajaxRequest('{:url("admin/auth_rule/update?id=1231")}', 'put', {name: $('input[name="name"]').val()})
+    }
+</script>
+
+</body>
+</html>

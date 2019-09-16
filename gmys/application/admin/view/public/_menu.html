@@ -1,0 +1,72 @@
+<div class="layui-side custom-admin">
+    <div class="layui-side-scroll">
+
+        <div class="custom-logo">
+            <!--<img src="__STATIC__/layui_admin/images/logo.png" alt=""/>-->
+            <h1>Hunter Admin</h1>
+        </div>
+
+        <!--<ul id="Nav" class="layui-nav layui-nav-tree">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="layui-icon">&#xe68e;</i>
+                    <em>主页</em>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="console">控制台</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="layui-icon">&#xe857;</i>
+                    <em>组件</em>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="views/form.html">表单</a></dd>
+                    <dd>
+                        <a href="javascript:;">页面</a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="login.html">登录页</a>
+                            </dd>
+                        </dl>
+                    </dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="layui-icon">&#xe770;</i>
+                    <em>用户</em>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="views/users.html">用户组</a></dd>
+                    <dd><a href="views/operaterule.html">权限配置</a></dd>
+                </dl>
+            </li>
+        </ul>-->
+        <ul id="Nav" class="layui-nav layui-nav-tree">
+            <!--一级菜单 s-->
+            {volist name="menus" id="vo" empty="暂时没有数据" }
+            {if condition="$vo['level'] eq 0"}
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="layui-icon">{$vo.icon}</i>
+                    <em>{$vo.title}</em>
+                </a>
+                <dl class="layui-nav-child">
+                    <!--二级菜单 s-->
+                    {volist name="menus" id="v" empty="暂时没有数据" }
+                    {if condition="$v['pid'] eq $vo['id']"}
+                    <dd><a href="{:url($v.name)}">{$v.title}</a></dd>
+                    {/if}
+                    {/volist}
+                    <!--二级菜单 e-->
+                </dl>
+            </li>
+            {/if}
+            {/volist}
+            <!--一级菜单 e-->
+        </ul>
+
+    </div>
+</div>
