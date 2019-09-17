@@ -1,9 +1,9 @@
 <template>
 	<view class="content">
 		<view class="imglist">
-			<image class="img" src="/static/images/xd1.jpg"></image>
+			<image  :src="thumb" :mode="aspectFit"></image>
 		</view>
-		<view class="imglist">
+		<view>
            <text>{{title}}</text>
 		</view>
 	</view>
@@ -13,7 +13,8 @@
 	export default {
 		data() {
 			return {
-				title: ''
+				title: '保利梧桐语',
+				thumb:'/static/images/xd1.jpg'
 			}
 		},
 		onLoad() {
@@ -27,9 +28,11 @@
 
 <style>
 	.content {
-		width: 100%;
-		margin: 0;
-		padding: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		color:$uni-color-error;
 	}
 	.imglist {
 		width: 100%;
