@@ -19,9 +19,9 @@ class AuthRule extends Base
      */
     public function getAuthRule($map = [], $size = 5)
     {
-        if(!isset($map['is_delete'])) {
+        /*if(!isset($map['is_delete'])) {
             $map['is_delete'] = ['neq', config('code.is_delete')];
-        }
+        }*/
 
         $order = ['id' => 'asc'];
 
