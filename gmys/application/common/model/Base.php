@@ -12,6 +12,7 @@ use think\Model;
 class Base extends Model
 {
     protected $autoWriteTimestamp = true;
+    protected $field = true; // 忽略数据表不存在的字段，如排出 $autoWriteTimestamp = true 时 update_time 字段对更新数据的干扰
 
     /**
      * 新增
