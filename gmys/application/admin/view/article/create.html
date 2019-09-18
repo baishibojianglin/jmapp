@@ -179,8 +179,9 @@
                 thumb = res.data; // 获取文章缩略图路径值
                 console.log(thumb);
                 if (thumb) {
-                    $('#thumb').hide();
-                    $('#thumb').after('<img src="/' + thumb + '" alt="" title="' + thumb + '" class="layui-upload-img" width="200">');
+                    //$('#thumb').hide();
+                    $('#thumb').next().remove('img');
+                    $('#thumb').after(' <img src="/' + thumb + '" alt="" title="' + thumb + '" class="layui-upload-img" width="200">');
                 }
             }
             ,error: function(){
