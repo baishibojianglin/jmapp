@@ -35,6 +35,10 @@ function ajaxRequest(url, type, data){
                     icon: 1, // 成功的表情
                     time: 1000 // 1秒关闭（如果不配置，默认是3秒）
                 }, function(){
+                    // （关闭弹窗）返回上级页面
+                    if (data.data.url == 'parent') {
+                        window.parent.location.reload();return;
+                    }
                     window.location.replace(data.data.url);
                 });
             }

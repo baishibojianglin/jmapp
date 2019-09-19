@@ -9,16 +9,16 @@
             <span class="<!--layui-breadcrumb-->">
                 <a href="">首页</a> |
                 <a href="">文章</a> |
-                <a href="javascript:history.go(-1)"><cite>文章列表 <i title="返回" class="layui-btn layui-btn-xs layui-icon layui-icon-return"></i></cite></a>
+                <a href="javascript:;"><cite>文章列表</cite></a>
             </span>
         </div>
     </div>
     <div class="layui-row">
         <div class="layui-card">
-            <div class="layui-card-header">添加文章</div>
+            <div class="layui-card-header">编辑文章</div>
             <div class="layui-card-body">
 
-                <form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+                <form class="layui-form" lay-filter="layui_form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
                     <div class="layui-form-item">
                         <label class="layui-form-label">文章标题</label>
                         <div class="layui-input-block">
@@ -139,6 +139,40 @@
     layui.use('form', function(){
         var form = layui.form;
 
+        // 给表单赋值
+        /*ajax GET请求 s*/
+        $.ajax({
+            url: '{:url("admin/article/read")}',
+            type: 'get',
+            data: {id: '{$_GET["id"]}'}, // {$_GET["id"]} 为 admin/article 控制器 edit($id) 方法的 $id 参数值
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+                // 给表单赋值
+                form.val("layui_form", { //layui_form 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+                    "title": data.data.title // "name": "value"
+                    ,"author": data.data.author
+                    ,"cate_id": data.data.cate_id
+                    ,"keywords": data.data.keywords
+                    ,"article_abstract": data.data.article_abstract
+                    ,"house_type": data.data.house_type
+                    ,"area": data.data.area
+                    ,"price": data.data.price
+                    ,"designer": data.data.designer
+                    ,"phone": data.data.phone
+                });
+
+                // 显示文章缩略图thumb并赋值
+                $('#thumb').after(' <img src="/' + data.data.thumb + '" alt="' + data.data.thumb + '" title="' + data.data.thumb + '" class="layui-upload-img" width="200">');
+                thumb = data.data.thumb;
+
+                // 给文章内容content赋值
+                $('#container').html(data.data.content);
+
+            }
+        });
+        /*ajax GET请求 e*/
+
         // 监听submit提交
         form.on('submit(*)', function(data){
             //layer.msg(JSON.stringify(data.field));
@@ -149,12 +183,13 @@
                 return false;
             }
             data.field.thumb = thumb; // 对 thumb 字段赋值
+            data.field.content = $('#container').html(); // 对 content 字段赋值
             //console.log(data.field); // 对 thumb 字段赋值后，测试是否赋值成功
 
             /*ajax请求 s*/
             // TODO：在 /public/static/ 目录下新建 common.js 文件，封装公用 ajax 方法
             var _data = data.field;
-            var url = "{:url('admin/article/save')}";
+            var url = "{:url('admin/article/update', array('id' => $_GET['id']))}";
             ajaxRequest(url, 'post', _data);
             /*ajax请求 e*/
 
@@ -177,11 +212,10 @@
             ,done: function(res){
                 //上传完毕回调
                 thumb = res.data; // 获取文章缩略图路径值
-                console.log(thumb);
                 if (thumb) {
-                    //$('#thumb').hide();
+                    $('#thumb').hide();
                     $('#thumb').next().remove('img');
-                    $('#thumb').after(' <img src="/' + thumb + '" alt="" title="' + thumb + '" class="layui-upload-img" width="200">');
+                    $('#thumb').after('<img src="/' + thumb + '" alt="" title="' + thumb + '" class="layui-upload-img" width="200">');
                 }
             }
             ,error: function(){

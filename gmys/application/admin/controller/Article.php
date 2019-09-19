@@ -144,7 +144,10 @@ class Article extends Base
      */
     public function edit($id)
     {
-        //
+        // 判断为GET请求
+        if (request()->isGet()) {
+            return view();
+        }
     }
 
     /**
@@ -160,21 +163,51 @@ class Article extends Base
         $param = input('param.');
 
         // validate验证
-        $validate = validate('Article');
+        /*$validate = validate('Article');
         if (!$validate->check($param, [], '')) {
             return show(config('code.error'), $validate->getError(), [], 403);
-        }
+        }*/
 
         // 判断数据是否存在
         $data = [];
         if (!empty($param['title'])) {
-            $data['title'] = $param['title'];
+            $data['title'] = trim($param['title']);
+        }
+        if (!empty($param['author'])) {
+            $data['author'] = trim($param['author']);
+        }
+        if (isset($param['cate_id'])) {
+            $data['cate_id'] = $param['cate_id'];
+        }
+        if (!empty($param['keywords'])) {
+            $data['keywords'] = trim($param['keywords']);
+        }
+        if (!empty($param['article_abstract'])) {
+            $data['article_abstract'] = trim($param['article_abstract']);
+        }
+        if (!empty($param['house_type'])) {
+            $data['house_type'] = trim($param['house_type']);
+        }
+        if (!empty($param['area'])) {
+            $data['area'] = trim($param['area']);
+        }
+        if (!empty($param['price'])) {
+            $data['price'] = trim($param['price']);
+        }
+        if (!empty($param['designer'])) {
+            $data['designer'] = trim($param['designer']);
+        }
+        if (!empty($param['phone'])) {
+            $data['phone'] = trim($param['phone']);
+        }
+        if (!empty($param['thumb'])) {
+            $data['thumb'] = trim($param['thumb']);
+        }
+        if (!empty($param['content'])) {
+            $data['content'] = $param['content'];
         }
         if (isset($param['status'])) { // 不能用 !empty() ，否则 status = 0 时也判断为空
             $data['status'] = input('param.status', null, 'intval');
-        }
-        if (!empty($data['rules'])) {
-            $data['rules'] = implode(',', $data['rules']);
         }
 
         if (empty($data)) {
@@ -183,14 +216,14 @@ class Article extends Base
 
         // 更新
         try {
-            $result = model('Article')->save($data, ['id' => $id]); // 更新
+            $result = model('Article')->save($data, ['article_id' => $id]); // 更新
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
         }
         if (false === $result) {
             return show(config('code.error'), '更新失败', [], 403);
         } else {
-            return show(config('code.success'), '更新成功', [], 201);
+            return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
         }
     }
 
@@ -211,7 +244,7 @@ class Article extends Base
         }
 
         // 判断数据是否存在
-        if ($data['id'] != $id) {
+        if ($data['article_id'] != $id) {
             return show(config('code.error'), '数据不存在');
         }
 

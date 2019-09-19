@@ -123,11 +123,6 @@ class Member extends Base
             }
 
             if ($data) {
-                // 处理数据
-                // 定义status_msg
-                $status = config('code.status');
-                $data['status_msg'] = $status[$data['status']];
-
                 return show(config('code.success'), 'ok', $data);
             }
         }
@@ -141,7 +136,10 @@ class Member extends Base
      */
     public function edit($id)
     {
-        //
+        // 判断为GET请求
+        if (request()->isGet()) {
+            return view();
+        }
     }
 
     /**
@@ -157,21 +155,36 @@ class Member extends Base
         $param = input('param.');
 
         // validate验证
-        $validate = validate('Member');
+        /*$validate = validate('Member');
         if (!$validate->check($param, [], '')) {
             return show(config('code.error'), $validate->getError(), [], 403);
-        }
+        }*/
 
         // 判断数据是否存在
         $data = [];
-        if (!empty($param['title'])) {
-            $data['title'] = $param['title'];
+        if (!empty($param['member_name'])) {
+            $data['member_name'] = trim($param['member_name']);
         }
-        if (isset($param['status'])) { // 不能用 !empty() ，否则 status = 0 时也判断为空
-            $data['status'] = input('param.status', null, 'intval');
+        if (isset($param['level_id'])) {
+            $data['level_id'] = $param['level_id'];
         }
-        if (!empty($data['rules'])) {
-            $data['rules'] = implode(',', $data['rules']);
+        if (!empty($param['abstract'])) {
+            $data['abstract'] = trim($param['abstract']);
+        }
+        if (!empty($param['phone'])) {
+            $data['phone'] = trim($param['phone']);
+        }
+        if (!empty($param['advantage'])) {
+            $data['advantage'] = trim($param['advantage']);
+        }
+        if (!empty($param['production'])) {
+            $data['production'] = trim($param['production']);
+        }
+        if (!empty($param['avatar'])) {
+            $data['avatar'] = trim($param['avatar']);
+        }
+        if (!empty($param['description'])) {
+            $data['description'] = $param['description'];
         }
 
         if (empty($data)) {
@@ -180,14 +193,14 @@ class Member extends Base
 
         // 更新
         try {
-            $result = model('Member')->save($data, ['id' => $id]); // 更新
+            $result = model('Member')->save($data, ['member_id' => $id]); // 更新
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
         }
         if (false === $result) {
             return show(config('code.error'), '更新失败', [], 403);
         } else {
-            return show(config('code.success'), '更新成功', [], 201);
+            return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
         }
     }
 
@@ -208,7 +221,7 @@ class Member extends Base
         }
 
         // 判断数据是否存在
-        if ($data['id'] != $id) {
+        if ($data['member_id'] != $id) {
             return show(config('code.error'), '数据不存在');
         }
 
