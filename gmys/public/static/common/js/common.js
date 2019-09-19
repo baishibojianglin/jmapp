@@ -4,6 +4,7 @@
 
 /**
  * 封装ajax请求方法
+ * TODO：最好把 增删改查操作 或者说不同的 REQUEST请求方式（POST/GET/PUT/DELETE） 分别封装ajax请求方法
  * @param url
  * @param type
  * @param data
@@ -28,18 +29,33 @@ function ajaxRequest(url, type, data){
         // 请求成功后的回调函数。这个函数传递3个参数：从服务器返回的数据（并根据dataType参数进行处理后的数据），一个描述状态的字符串，还有 jqXHR（在jQuery 1.4.x前为XMLHttpRequest）对象。
         success: function (data, textStatus, jqXHR) {
             if(data.status != 1){ // 执行 error:function(){}，由于后台返回的HTTP状态码导致
-                layer.msg(data.message, {icon: 5, time: 1000}); // 失败的表情
+                layer.msg(data.message, {icon: 5, time: 1000}, function () {
+
+                    // 执行删除：删除列表数据（删除失败）
+                    if (data.data.url == 'deleteFalse') { // 删除失败
+                        window.location.reload();return;
+                    }
+
+                }); // 失败的表情
                 return;
             }else if(data.status == 1){
                 layer.msg(data.message, {
                     icon: 1, // 成功的表情
                     time: 1000 // 1秒关闭（如果不配置，默认是3秒）
                 }, function(){
-                    // （关闭弹窗）返回上级页面
+
+                    // 执行删除新建或编辑：（关闭弹窗）返回上级页面
                     if (data.data.url == 'parent') {
                         window.parent.location.reload();return;
                     }
+
+                    // 执行删除：删除列表数据（删除成功）
+                    if (data.data.url == 'delete') {
+                        return;
+                    }
+
                     window.location.replace(data.data.url);
+
                 });
             }
         },

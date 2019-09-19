@@ -1,0 +1,89 @@
+{include file="public/_meta" /}
+</head>
+<body class="layui-view-body">
+<div class="layui-content">
+    <div class="layui-page-header" >
+        <div class="pagewrap">
+            <span class="<!--layui-breadcrumb-->">
+                <a href="">首页</a> |
+                <a href="">设计团队</a> |
+                <a href="javascript:;"><cite>成员等级</cite></a>
+            </span>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-card">
+            <div class="layui-card-header">编辑成员等级</div>
+            <div class="layui-card-body">
+
+                <form class="layui-form" lay-filter="layui_form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">等级名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="level_name" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">描述</label>
+                        <div class="layui-input-block">
+                            <textarea name="describe" placeholder="请输入内容，限200字符" class="layui-textarea" maxlength="200"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<script src="__STATIC__/layui/layui.js"></script>-->
+{include file="public/_footer" /}
+
+<script>
+    /**
+     * 表单模块 - layui.form
+     */
+    layui.use('form', function(){
+        var form = layui.form;
+
+        // 给表单赋值
+        /*ajax GET请求 s*/
+        $.ajax({
+            url: '{:url("admin/member_level/read")}',
+            type: 'get',
+            data: {id: '{$_GET["id"]}'}, // {$_GET["id"]} 为 admin/MemberLevel 控制器 edit($id) 方法的 $id 参数值
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+                // 给表单赋值
+                form.val("layui_form", { //layui_form 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+                    "level_name": data.data.level_name // "name": "value"
+                    ,"describe": data.data.describe
+                });
+
+            }
+        });
+        /*ajax GET请求 e*/
+
+        // 监听submit提交
+        form.on('submit(*)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+
+            /*ajax请求 s*/
+            // TODO：在 /public/static/ 目录下新建 common.js 文件，封装公用 ajax 方法
+            var _data = data.field;
+            var url = "{:url('admin/member_level/update', array('id' => $_GET['id']))}";
+            ajaxRequest(url, 'post', _data);
+            /*ajax请求 e*/
+
+            return false; // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
+</body>
+</html>

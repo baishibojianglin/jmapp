@@ -30,12 +30,9 @@
                         <div class="layui-input-block">
                             <select name="level_id" lay-filter="level_id" lay-verify="required">
                                 <option value="">请选择…</option>
-                                <option value="1">实习设计师</option>
-                                <option value="2">铜牌设计师</option>
-                                <option value="3">白银设计师</option>
-                                <option value="4">黄金设计师</option>
-                                <option value="5">钻石设计师</option>
-                                <option value="6">超级设计师</option>
+                                {volist name="memberLevelList" id="vo"}
+                                <option value="{$vo.level_id}">{$vo.level_name}<br/></option>
+                                {/volist}
                             </select>
                         </div>
                     </div>

@@ -7,14 +7,14 @@ use think\Controller;
 use think\Request;
 
 /**
- * 后台团队成员控制器类
- * Class Member
+ * 后台团队成员等级控制器类
+ * Class MemberLevel
  * @package app\admin\controller
  */
-class Member extends Base
+class MemberLevel extends Base
 {
     /**
-     * 显示团队成员资源列表
+     * 显示团队成员等级资源列表
      * @return \think\response\Json
      */
     public function index()
@@ -26,10 +26,10 @@ class Member extends Base
     }
 
     /**
-     * 获取团队成员资源列表
+     * 获取团队成员等级资源列表
      * @return \think\response\Json
      */
-    public function getMember()
+    public function getMemberLevel()
     {
         // 判断为GET请求
         if (request()->isGet()) {
@@ -39,31 +39,32 @@ class Member extends Base
 
             // 查询条件
             $map = [];
-            if (!empty($param['member_name'])) {
-                $map['m.member_name'] = ['like', '%' . trim($param['member_name']) . '%'];
-            }
-            if (!empty($param['level_name'])) {
-                // 获取文章类别 level_id
-                $memberLevel = db('member_level')->field('level_id')->where('level_name', 'like', '%' . trim($param['level_name']) . '%')->select();
-                $level_ids = [];
-                foreach ($memberLevel as $key => $value) {
-                    $level_ids[] = $value['level_id'];
-                }
-                $map['m.level_id'] = ['in', $level_ids]; // [NOT] IN 查询
-            }
+            /*if (!empty($param['level_name'])) {
+                $map['level_name'] = ['like', '%' . trime($param['level_name']) . '%'];
+            }*/
 
             // 获取分页page、size
             $this->getPageAndSize($param);
 
             // 获取分页列表数据 模式一：基于paginate()自动化分页
-            $data = model('Member')->getMember($map, $this->size);
+            $data = db('member_level')->where($map)->paginate($this->size);
 
             return show(config('code.success'), 'OK', $data);
         }
     }
 
     /**
-     * 显示创建团队成员资源表单页.
+     * 获取团队成员等级资源列表（静态方法）
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public static function memberLevelList()
+    {
+        $data = db('member_level')->field('level_id, level_name')->select();
+        return $data;
+    }
+
+    /**
+     * 显示创建团队成员等级资源表单页.
      *
      * @return \think\Response
      */
@@ -71,12 +72,12 @@ class Member extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['memberLevelList' => MemberLevel::memberLevelList()]);
+            return view();
         }
     }
 
     /**
-     * 保存新建的团队成员资源
+     * 保存新建的团队成员等级资源
      * @param Request $request
      * @return \think\response\Json
      * @throws ApiException
@@ -89,7 +90,7 @@ class Member extends Base
             $data = input('post.');
 
             // validate验证
-            /*$validate = validate('Member');
+            /*$validate = validate('MemberLevel');
             if (!$validate->check($data)) {
                 return show(config('code.error'), $validate->getError(), [], 403);
             }*/
@@ -99,21 +100,21 @@ class Member extends Base
             // 新增
             // 捕获异常
             try {
-                $id = model('Member')->add($data, 'member_id'); // 新增
+                $id = db('member_level')->insert($data); // 新增
             } catch (\Exception $e) {
                 throw new ApiException($e->getMessage(), 500, config('code.error'));
             }
             // 判断是否新增成功：获取id
             if ($id) {
-                return show(config('code.success'), '团队成员新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/member/index'], 201);
+                return show(config('code.success'), '团队成员等级新增成功', ['url' => 'parent'], 201); //['url' => config('app.SERVER_NAME') . $this->module . '/member_level/index']
             } else {
-                return show(config('code.error'), '团队成员新增失败', [], 403);
+                return show(config('code.error'), '团队成员等级新增失败', [], 403);
             }
         }
     }
 
     /**
-     * 显示指定的团队成员资源
+     * 显示指定的团队成员等级资源
      * @param int $id
      * @return \think\response\Json
      * @throws ApiException
@@ -123,7 +124,7 @@ class Member extends Base
         // 判断为GET请求
         if (request()->isGet()) {
             try {
-                $data = model('Member')->find($id);
+                $data = db('MemberLevel')->find($id);
             } catch (\Exception $e) {
                 throw new ApiException($e->getMessage(), 500, config('code.error'));
             }
@@ -144,12 +145,12 @@ class Member extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['memberLevelList' => MemberLevel::memberLevelList()]);
+            return view();
         }
     }
 
     /**
-     * 保存更新的团队成员资源
+     * 保存更新的团队成员等级资源
      * @param Request $request
      * @param int $id
      * @return \think\response\Json
@@ -161,36 +162,18 @@ class Member extends Base
         $param = input('param.');
 
         // validate验证
-        /*$validate = validate('Member');
+        /*$validate = validate('MemberLevel');
         if (!$validate->check($param, [], '')) {
             return show(config('code.error'), $validate->getError(), [], 403);
         }*/
 
         // 判断数据是否存在
         $data = [];
-        if (!empty($param['member_name'])) {
-            $data['member_name'] = trim($param['member_name']);
+        if (!empty($param['level_name'])) {
+            $data['level_name'] = trim($param['level_name']);
         }
-        if (isset($param['level_id'])) {
-            $data['level_id'] = $param['level_id'];
-        }
-        if (!empty($param['abstract'])) {
-            $data['abstract'] = trim($param['abstract']);
-        }
-        if (!empty($param['phone'])) {
-            $data['phone'] = trim($param['phone']);
-        }
-        if (!empty($param['advantage'])) {
-            $data['advantage'] = trim($param['advantage']);
-        }
-        if (!empty($param['production'])) {
-            $data['production'] = trim($param['production']);
-        }
-        if (!empty($param['avatar'])) {
-            $data['avatar'] = trim($param['avatar']);
-        }
-        if (!empty($param['description'])) {
-            $data['description'] = $param['description'];
+        if (!empty($param['describe'])) {
+            $data['describe'] = $param['describe'];
         }
 
         if (empty($data)) {
@@ -199,7 +182,7 @@ class Member extends Base
 
         // 更新
         try {
-            $result = model('Member')->save($data, ['member_id' => $id]); // 更新
+            $result = db('MemberLevel')->where(['level_id' => $id])->update($data); // 更新
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
         }
@@ -211,36 +194,44 @@ class Member extends Base
     }
 
     /**
-     * 删除指定团队成员资源
+     * 删除指定团队成员等级资源
      * @param int $id
      * @return \think\response\Json
      * @throws ApiException
      */
     public function delete($id)
     {
-        // 显示指定的店鋪比赛场次模板
+        // 显示指定的团队成员等级资源
         try {
-            $data = model('Member')->find($id);
+            $data = db('MemberLevel')->find($id);
             //return show(config('code.success'), 'ok', $data);
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
         }
 
         // 判断数据是否存在
-        if ($data['member_id'] != $id) {
+        if ($data['level_id'] != $id) {
             return show(config('code.error'), '数据不存在');
         }
 
+        // 查询是否已有团队成员配置该等级
+        try {
+            $memberList = db('member')->where('level_id', $id)->select();
+            //return show(config('code.success'), 'ok', count($memberList));
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), 500, config('code.error'));
+        }
+
         // 真删除
-        if ($data['status'] == config('code.status_disable') && empty($data['rules'])) {
-            $result = model('Member')->destroy($id);
+        if (count($memberList) == 0) {
+            $result = db('MemberLevel')->delete($id);
             if (!$result) {
-                return show(config('code.error'), '删除失败');
+                return show(config('code.error'), '删除失败', ['url' => 'parent']);
             } else {
-                return show(config('code.success'), '删除成功');
+                return show(config('code.success'), '删除成功', ['url' => 'delete']);
             }
         } else {
-            return show(config('code.error'), '删除失败：用户组启用或用户组规则不为空');
+            return show(config('code.error'), '删除失败：已有团队成员配置该等级', ['url' => 'deleteFalse']);
         }
     }
 }
