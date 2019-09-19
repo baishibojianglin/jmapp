@@ -7,29 +7,29 @@
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
                 <a href="">文章</a>
-                <a><cite>文章列表</cite></a>
+                <a><cite>文章分类</cite></a>
             </span>
         </div>
     </div>
     <div class="layui-row">
         <div class="layui-card">
-            <div class="layui-card-header">文章列表</div>
+            <div class="layui-card-header">文章分类列表</div>
             <div class="layui-card-body">
                 <script type="text/html" id="toolbar">
                     <div class="form-box">
                         <div class="layui-form layui-form-item">
                             <div class="layui-inline">
-                                <button class="layui-btn layui-btn-blue"  onclick="location.href='{:url("admin/article/create")}'" ><i class="layui-icon">&#xe654;</i>新增</button>
+                                <button class="layui-btn layui-btn-blue"  onclick="location.href='{:url("admin/article_cate/create")}'" ><i class="layui-icon">&#xe654;</i>新增</button>
                             </div>
                             <div class="layui-inline">
-                                <div class="layui-form-mid">标题</div>
-                                <div class="layui-input-inline" style="width: 100px;">
-                                    <input type="text" name="article_title" value="" autocomplete="off" class="layui-input">
-                                </div>
-                                <div class="layui-form-mid">类别</div>
+                                <div class="layui-form-mid">顶级分类</div>
                                 <div class="layui-input-inline" style="width: 100px;">
                                     <input type="text" name="cate_name" value="" autocomplete="off" class="layui-input">
                                 </div>
+                                <!--<div class="layui-form-mid">上级</div>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="text" name="parent_id" value="" autocomplete="off" class="layui-input">
+                                </div>-->
                                 <button class="layui-btn layui-btn-blue" onclick="layuiTable()">查询</button>
                                 <!--<button class="layui-btn layui-btn-primary">重置</button>-->
                             </div>
@@ -62,28 +62,22 @@
             table.render({
                 elem: '#layui_table'
                 , cols: [[ //表头
-                    {field: 'article_id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                    , {field: 'title', title: '标题', cellMinWidth: 120}
-                    , {field: 'thumb', title: '缩略图', width: 120, templet: '<div><img src="/{{d.thumb}}" alt="{{d.thumb}}" title="{{d.thumb}}" width="200"></div>'}
-                    , {field: 'cate_name', title: '类别', width: 120}
-                    , {field: 'status_msg', title: '状态', width: 60}
-                    , {field: 'create_time', title: '创建时间', width: 120}
-                    , {field: 'update_time', title: '更新时间', width: 120}
+                    {field: 'cate_id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                    , {field: 'cate_name', title: '分类名称', cellMinWidth: 120}
+                    , {field: 'parent_id', title: '上级ID', width: 120}
+                    , {field: 'show_in_nav', title: '是否导航显示', width: 120}
+                    , {field: 'sort', title: '排序', width: 120}
                     , {title: '操作', fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
                 ]]
-                , url: '{:url("admin/article/getArticle")}' //数据接口
+                , url: '{:url("admin/article_cate/getArticleCate")}' //数据接口
                 //,method: 'get' // 接口http请求类型，默认：get
-                ,where: {article_title: $('input[name="article_title"]').val(), cate_name: $('input[name="cate_name"]').val()} // 接口的其它参数，此处为搜索条件
+                ,where: {cate_name: $('input[name="cate_name"]').val(), parent_id: $('input[name="parent_id"]').val()} // 接口的其它参数，此处为搜索条件
                 //,contentType: 'application/x-www-form-urlencoded'
                 , parseData: function (res) { //res 即为原始返回的数据
-                    /*console.log(res);
-                    console.log('limit ' + this.limit); // 每页数据量
-                    console.log('curr ' + res.data.current_page); // 当前页码*/
-                    //var result = res.data.data.slice(this.limit*(res.data.current_page-1),this.limit*res.data.current_page);
                     return {
                         "code": res.status, //解析接口状态
                         "msg": res.message, //解析提示文本
-                        "count": res.data.total, //解析数据长度
+                        //"count": res.data.count, //解析数据长度
                         "data": res.data.data //解析数据列表
                     };
                 }
@@ -101,10 +95,7 @@
                 //, id: 'layui_table'
                 , toolbar: '#toolbar' //'<div>权限规则列表</div>'
                 //,height: 312 // 设定容器高度
-                ,page: true //开启分页
-                /*,page: {
-                    limit: 5
-                }*/
+                //,page: true //开启分页
             });
 
             // 监听工具条
@@ -129,7 +120,7 @@
                         title: '编辑',
                         //skin: 'layui-layer-rim', //加上边框
                         area: ['95%', '95%'], //宽高
-                        content: '{:url("admin/article/edit")}?id=' + data.article_id,
+                        content: '{:url("admin/article_cate/edit")}?id=' + data.cate_id,
                         maxmin: true
                     });
 

@@ -36,11 +36,10 @@
                         <div class="layui-input-block">
                             <select name="cate_id" lay-filter="cate_id" lay-verify="required">
                                 <option value="">请选择…</option>
-                                <option value="1">新中式</option>
-                                <option value="2">田园风</option>
-                                <option value="3">欧式</option>
-                                <option value="4">现代</option>
-                                <option value="0">其他</option>
+                                <option value="0">顶级分类</option>
+                                {volist name="articleCateTree" id="vo"}
+                                <option value="{$vo.cate_id}">{$vo.cate_name}<br/></option>
+                                {/volist}
                             </select>
                         </div>
                     </div>
