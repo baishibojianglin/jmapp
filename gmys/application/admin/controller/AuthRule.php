@@ -65,8 +65,7 @@ class AuthRule extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view();
-            return $this->authRuleTree();
+            return view('', ['authRuleTree' => $this->_authRuleTree()]);
         }
     }
 
@@ -109,12 +108,9 @@ class AuthRule extends Base
             }
             // 判断是否新增成功：获取id
             if ($id) {
-                // 每次新增、更新或删除Auth规则时，必须删除指定session值（指定作用域的指定值）
-                session('_auth_list_' . $this->session_admin->admin_id . '2', null, config('admin.session_admin_scope'));
-
-                return show(config('code.success'), 'id = ' . $id . '的Auth规则新增成功', [], 201);
+                return show(config('code.success'), 'id = ' . $id . '的Auth规则新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/auth_rule/index'], 201);
             } else {
-                return show(config('code.error'), '用户新增失败', [], 403);
+                return show(config('code.error'), 'Auth规则新增失败', [], 403);
             }
         }
     }
@@ -156,9 +152,7 @@ class AuthRule extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            $data = model('AuthRule')->find($id);
-            return $this->fetch('', ['data' => $data]);
-            //return $this->authRuleTree();
+            return $this->fetch('', ['authRuleTree' => $this->_authRuleTree()]);
         }
     }
 
@@ -172,8 +166,7 @@ class AuthRule extends Base
     public function update(Request $request, $id)
     {
         // 判断为PUT请求
-        //if (request()->isPut()) {
-        if (request()->isPost()) {
+        if (request()->isPut()) {
             // 传入的数据
             $param = input('param.');
 
@@ -231,51 +224,23 @@ class AuthRule extends Base
             if (false === $result) {
                 return show(config('code.error'), '更新失败', [], 403);
             } else {
-                // 每次新增、更新或删除Auth规则时，必须删除指定session值（指定作用域的指定值）
+                // 每次更新Auth规则时，必须删除指定session值（指定作用域的指定值）
                 session('_auth_list_' . $this->session_admin->admin_id . '2', null, config('admin.session_admin_scope'));
 
-                return show(config('code.success'), '更新成功', [], 201);
+                return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
             }
         }
     }
 
     /**
-     * 删除指定Auth规则资源
-     * @param int $id
-     * @return \think\response\Json
-     * @throws ApiException
-     * @throws \think\Exception
+     * 删除指定资源
+     *
+     * @param  int  $id
+     * @return \think\Response
      */
     public function delete($id)
     {
-        // 判断为DELETE请求
-        if (request()->isDelete()) {
-            // 显示指定的管理员
-            try {
-                $data = model('AuthRule')->find($id);
-                //return show(config('code.success'), 'ok', $data);
-            } catch (\Exception $e) {
-                throw new ApiException($e->getMessage(), 500, config('code.error'));
-            }
-
-            // 判断数据是否存在
-            if ($data['id'] != $id) {
-                return show(config('code.error'), '数据不存在');
-            }
-
-            // 真删除
-            $result = model('AuthRule')->destroy($id);
-            if (!$result) {
-                return show(config('code.error'), '删除失败', ['url' => config('app.SERVER_NAME') . $this->module . '/auth_rule/index']);
-            } else {
-                // 每次新增、更新或删除Auth规则时，必须删除指定session值（指定作用域的指定值）
-                session('_auth_list_' . $this->session_admin->admin_id . '2', null, config('admin.session_admin_scope'));
-
-                return show(config('code.success'), '删除成功', ['url' => config('app.SERVER_NAME') . $this->module . '/auth_rule/index']);
-            }
-        } else {
-            return show(config('code.error'), '请求不合法', [], 400);
-        }
+        //
     }
 
     /**

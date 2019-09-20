@@ -22,7 +22,7 @@
                                 <button class="layui-btn layui-btn-blue"  onclick="location.href='{:url("admin/auth_rule/create")}'" ><i class="layui-icon">&#xe654;</i>新增</button>
                             </div>
                             <div class="layui-inline">
-                                <div class="layui-form-mid">规则名称</div>
+                                <div class="layui-form-mid">（顶级）规则名称</div>
                                 <div class="layui-input-inline" style="width: 100px;">
                                     <input type="text" name="title" value="" autocomplete="off" class="layui-input">
                                 </div>
@@ -78,7 +78,6 @@
                 ,where: {name: $('input[name="name"]').val(), title: $('input[name="title"]').val()} // 接口的其它参数，此处为搜索条件
                 //,contentType: 'application/x-www-form-urlencoded'
                 , parseData: function (res) { //res 即为原始返回的数据
-                    //console.log(res);
                     return {
                         "code": res.status, //解析接口状态
                         "msg": res.message, //解析提示文本
@@ -86,6 +85,10 @@
                         "data": res.data //解析数据列表
                     };
                 }
+                /*, request: { // 用于对分页请求的参数：page、limit重新设定名称
+                    //pageName: 'curr' //页码的参数名称，默认：page
+                    limitName: 'size' //每页数据量的参数名，默认：limit
+                }*/
                 , response: { // 自定义数据响应名称
                     //statusName: 'status' //规定数据状态的字段名称，默认：code
                     statusCode: 1 //规定成功的状态码，默认：0
@@ -112,28 +115,23 @@
                         obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                         layer.close(index);
                         //向服务端发送删除指令
-                        ajaxRequest('{:url("admin/auth_rule/delete")}', 'delete', {id: data.id}); // ajax请求
                     });
                 } else if(layEvent === 'edit'){ //编辑
                     //do something
-                    console.log(data);
                     layer.open({
                         type: 2,
                         title: '编辑',
                         //skin: 'layui-layer-rim', //加上边框
-                        area: ['420px', '240px'], //宽高
+                        area: ['90%', '90%'], //宽高
                         content: '{:url("admin/auth_rule/edit")}?id=' + data.id,
                         maxmin: true
                     });
-//                    var _data = data.field;
-//                    var url = "{:url('Login/check')}";
-//                    ajaxRequest(url, _data);
 
                     //同步更新缓存对应的值
-                    obj.update({
+                    /*obj.update({
                         name: '123'
                         ,title: 'xxx'
-                    });
+                    });*/
                 } else if(layEvent === 'LAYTABLE_TIPS'){
                     layer.alert('Hi，头部工具栏扩展的右侧图标。');
                 }

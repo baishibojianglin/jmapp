@@ -96,7 +96,7 @@ class Admin extends Base
             }
 
             // validate验证
-            $validate = validate('AdminUser');
+            $validate = validate('Admin');
             if (!$validate->check($data)) {
                 return show(config('code.error'), $validate->getError(), [], 403); //$this->error($validate->getError());
             }
@@ -160,6 +160,21 @@ class Admin extends Base
     }
 
     /**
+     * 显示编辑资源表单页.
+     *
+     * @param  int  $id
+     * @return \think\Response
+     */
+    public function edit($id)
+    {
+        // 判断为GET请求
+        if (request()->isGet()) {
+            $authGroupList = model('AuthGroup')->select();
+            return $this->fetch('', ['authGroupList' => $authGroupList]);
+        }
+    }
+
+    /**
      * 保存更新的管理员
      * @param int $id
      * @return \think\response\Json
@@ -178,7 +193,7 @@ class Admin extends Base
             }
 
             // validate验证
-            $validate = validate('AdminUser');
+            $validate = validate('Admin');
             if (!$validate->check($param, [], 'update')) {
                 return show(config('code.error'), $validate->getError(), [], 403);
             }
