@@ -1,30 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
+{include file="public/_meta" /}
 </head>
-<body>
-<a href="javascript:history.go(-1)">返回</a>
-<form action="{:url('Admin/add')}" method="post">
-    <div>
-        <label>用户组
-        <select name="group_id" id="">
-            {foreach name='authGroupList' item='vo'}
-            <option value="{$vo.id}">{$vo.title}</option>
-            {/foreach}
-        </select>
-        </label>
+<body class="layui-view-body">
+<div class="layui-content">
+    <div class="layui-page-header" >
+        <div class="pagewrap">
+            <span class="<!--layui-breadcrumb-->">
+                <a href="">首页</a> |
+                <a href="">管理用户</a> |
+                <a href="javascript:history.go(-1);"><cite>管理员 <i title="返回" class="layui-btn layui-btn-xs layui-icon layui-icon-return"></i></cite></a>
+            </span>
+        </div>
     </div>
-    <div>
-        <label>管理员名称 <input type="text" name="admin_name"></label>
+    <div class="layui-row">
+        <div class="layui-card">
+            <div class="layui-card-header">添加管理员</div>
+            <div class="layui-card-body">
+
+                <form class="layui-form" lay-filter="layui_form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">管理员名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="admin_name" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">密码</label>
+                        <div class="layui-input-block">
+                            <input type="password" name="password" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户组</label>
+                        <div class="layui-input-block">
+                            <select name="group_id" lay-filter="group_id" lay-verify="required">
+                                <option value="">请选择…</option>
+                                {volist name="authGroupList" id="vo"}
+                                <option value="{$vo.id}">{$vo.title}<br/></option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="status" value="0" title="禁用" checked>
+                            <input type="radio" name="status" value="1" title="启用">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
-    <div>
-        <label>密码 <input type="password" name="password"></label>
-    </div>
-    <div>
-        <input type="submit">
-    </div>
-</form>
+</div>
+
+<!--<script src="__STATIC__/layui/layui.js"></script>-->
+{include file="public/_footer" /}
+
+<script>
+    /**
+     * 表单模块 - layui.form
+     */
+    layui.use('form', function(){
+        var form = layui.form;
+
+        // 监听submit提交
+        form.on('submit(*)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+
+            /*ajax请求 s*/
+            // TODO：在 /public/static/ 目录下新建 common.js 文件，封装公用 ajax 方法
+            var _data = data.field;
+            var url = "{:url('admin/admin/add')}";
+            ajaxRequest(url, 'post', _data);
+            /*ajax请求 e*/
+
+            return false; // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
 </body>
 </html>
