@@ -58,15 +58,14 @@ class AuthRule extends Base
 
     /**
      * 显示创建Auth规则资源表单页
-     * @return \think\response\Json
+     * @return \think\response\View
      * @throws ApiException
      */
     public function create()
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view();
-            return $this->authRuleTree();
+            return view('', ['authRuleTree' => $this->_authRuleTree()]);
         }
     }
 
@@ -112,9 +111,9 @@ class AuthRule extends Base
                 // 每次新增、更新或删除Auth规则时，必须删除指定session值（指定作用域的指定值）
                 session('_auth_list_' . $this->session_admin->admin_id . '2', null, config('admin.session_admin_scope'));
 
-                return show(config('code.success'), 'id = ' . $id . '的Auth规则新增成功', [], 201);
+                return show(config('code.success'), 'id = ' . $id . '的Auth规则新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/auth_rule/index'], 201);
             } else {
-                return show(config('code.error'), '用户新增失败', [], 403);
+                return show(config('code.error'), 'Auth规则新增失败', [], 403);
             }
         }
     }
@@ -156,9 +155,7 @@ class AuthRule extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            $data = model('AuthRule')->find($id);
-            return $this->fetch('', ['data' => $data]);
-            //return $this->authRuleTree();
+            return $this->fetch('', ['authRuleTree' => $this->_authRuleTree()]);
         }
     }
 
@@ -172,8 +169,7 @@ class AuthRule extends Base
     public function update(Request $request, $id)
     {
         // 判断为PUT请求
-        //if (request()->isPut()) {
-        if (request()->isPost()) {
+        if (request()->isPut()) {
             // 传入的数据
             $param = input('param.');
 
@@ -234,7 +230,7 @@ class AuthRule extends Base
                 // 每次新增、更新或删除Auth规则时，必须删除指定session值（指定作用域的指定值）
                 session('_auth_list_' . $this->session_admin->admin_id . '2', null, config('admin.session_admin_scope'));
 
-                return show(config('code.success'), '更新成功', [], 201);
+                return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
             }
         }
     }
@@ -244,7 +240,6 @@ class AuthRule extends Base
      * @param int $id
      * @return \think\response\Json
      * @throws ApiException
-     * @throws \think\Exception
      */
     public function delete($id)
     {

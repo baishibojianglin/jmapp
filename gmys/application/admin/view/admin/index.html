@@ -63,7 +63,7 @@
                 elem: '#layui_table'
                 , cols: [[ //表头
                     {field: 'admin_id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                    , {field: 'admin_name', title: '名称', cellMinWidth: 120}
+                    , {field: 'admin_name', title: '名称', width: 120}
                     , {field: 'group_title', title: '用户组', width: 120}
                     , {field: 'last_login_ip', title: '最近登录IP', width: 120}
                     , {field: 'last_login_time', title: '最近登录时间', width: 120}
@@ -77,10 +77,8 @@
                 ,where: {admin_name: $('input[name="admin_name"]').val(), group_title: $('input[name="group_title"]').val()} // 接口的其它参数，此处为搜索条件
                 //,contentType: 'application/x-www-form-urlencoded'
                 , parseData: function (res) { //res 即为原始返回的数据
-                    /*console.log(res);
-                    console.log('limit ' + this.limit); // 每页数据量
-                    console.log('curr ' + res.data.current_page); // 当前页码*/
-                    //var result = res.data.data.slice(this.limit*(res.data.current_page-1),this.limit*res.data.current_page);
+                    //console.log(this.limit); // 每页数据量
+                    //console.log(res.data.current_page); // 当前页码*/
                     return {
                         "code": res.status, //解析接口状态
                         "msg": res.message, //解析提示文本
@@ -102,10 +100,7 @@
                 //, id: 'layui_table'
                 , toolbar: '#toolbar' //'<div>权限规则列表</div>'
                 //,height: 312 // 设定容器高度
-                ,page: true //开启分页
-                /*,page: {
-                    limit: 2
-                }*/
+                ,page: true //开启分页 //, page: {limit: 5}
             });
 
             // 监听工具条
@@ -124,18 +119,14 @@
                     });
                 } else if(layEvent === 'edit'){ //编辑
                     //do something
-                    console.log(data);
                     layer.open({
                         type: 2,
                         title: '编辑',
                         //skin: 'layui-layer-rim', //加上边框
-                        area: ['420px', '240px'], //宽高
-                        content: '{:url("admin/auth_rule/edit")}?id=' + data.id,
+                        area: ['90%', '90%'], //宽高
+                        content: '{:url("admin/admin/edit")}?id=' + data.admin_id,
                         maxmin: true
                     });
-//                    var _data = data.field;
-//                    var url = "{:url('Login/check')}";
-//                    ajaxRequest(url, _data);
 
                     //同步更新缓存对应的值
                     obj.update({
