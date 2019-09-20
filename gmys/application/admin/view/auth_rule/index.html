@@ -115,6 +115,7 @@
                         obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                         layer.close(index);
                         //向服务端发送删除指令
+                        ajaxRequest('{:url("admin/auth_rule/delete")}', 'delete', {id: data.id}); // ajax请求
                     });
                 } else if(layEvent === 'edit'){ //编辑
                     //do something
