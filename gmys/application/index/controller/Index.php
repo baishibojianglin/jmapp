@@ -9,4 +9,5 @@ class Index
        $articlelist=Db::name('article')->order('artitle_id desc')->select();     
        return json($articlelist);
     }
+    
 }
