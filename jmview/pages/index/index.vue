@@ -2,7 +2,7 @@
 	<view>
 		<vrow class="content" v-for="item in artitle_list">
 		    <vcol span="100">
-			    <navigator>
+			    <navigator url="detail" open-type="navigate">
 				  <image class="img" v-bind:src="item.thumb"></image>
 				</navigator>
 		    </vcol>				  
@@ -54,7 +54,8 @@
 
 <style>
 	.content{
-		margin:15upx 0;
+		font-size: 32upx;
+		margin: 0 0 15upx 0;
 	}
 	.img {
 		width: 100%;
@@ -71,6 +72,7 @@
 		background:-moz-linear-gradient(left,#695648,#82858A);/*火狐*/ 
 		background:-o-linear-gradient(left,#695648,#82858A); /* Opera 11.1 - 12.0 */
 		color:#fff;
-		margin-top: 5upx;
+		margin-top: 10upx;
+		font-size: 30upx;
 	}
 </style>

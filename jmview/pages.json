@@ -6,7 +6,15 @@
 				"navigationBarTitleText": "现代风格",
 				"navigationBarBackgroundColor": "#F8F8F8"
 			}
+		},
+		{
+			"path": "pages/index/detail",
+			"style": {
+				"navigationBarTitleText": "现代风格",
+				"navigationBarBackgroundColor": "#F8F8F8"
+			}
 		}
+		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
