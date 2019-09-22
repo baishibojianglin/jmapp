@@ -236,4 +236,25 @@ class Base extends Controller
         }
         return $superAdmin;
     }
+
+
+    /**
+     * ajax 修改指定表数据字段  一般修改状态，比如：是否推荐、是否开启 等 图标切换的
+     * table,id_name,id_value,field,value
+     * @return \think\response\Json
+     * @throws \think\Exception
+     */
+    public function changeTableVal(){
+        $table = input('table'); // 表名
+        $id_name = input('id_name'); // 表主键id名
+        $id_value = input('id_value'); // 表主键id值
+        $field  = input('field'); // 修改哪个字段
+        $value  = input('value'); // 修改字段值
+        $result = db($table)->where("$id_name = $id_value")->update(array($field => $value)); // 根据条件保存修改的数据
+        if($result){
+            return show(config('code.success'), '更新成功', [], 201);
+        }else{
+            return show(config('code.error'), '更新失败', [], 403);
+        }
+    }
 }

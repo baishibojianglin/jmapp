@@ -21,6 +21,6 @@ class Admin extends Validate
 
     protected $scene = [
         'login' => ['admin_name' => 'require|max:20', 'admin_name.unique' => 'unique:admin, admin_name^admin_id', 'password'], // 忽略唯一(unique)类型字段admin_name对自身数据的唯一性验证
-        'update' => ['admin_name' => 'require|max:20', 'admin_name.unique' => 'unique:admin, admin_name^admin_id', 'password'],
+        'update' => ['admin_name' => 'require|max:20', 'admin_name.unique' => 'unique:admin, admin_name^admin_id'],
     ];
 }

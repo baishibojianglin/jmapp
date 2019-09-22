@@ -15,6 +15,7 @@
         <div class="layui-card">
             <div class="layui-card-header">团队成员列表</div>
             <div class="layui-card-body">
+                <!--templet - 自定义列模板 s-->
                 <script type="text/html" id="toolbar">
                     <div class="form-box">
                         <div class="layui-form layui-form-item">
@@ -36,6 +37,7 @@
                         </div>
                     </div>
                 </script>
+                <!--templet - 自定义列模板 e-->
                 <table class="layui-hide" id="layui_table" lay-filter="lay_filter_table"></table>
             </div>
         </div>
@@ -66,6 +68,7 @@
                     , {field: 'member_name', title: '成员名称', cellMinWidth: 120}
                     , {field: 'avatar', title: '头像', width: 120, templet: '<div><img src="/{{d.avatar}}" alt="{{d.avatar}}" title="{{d.avatar}}" width="200"></div>'}
                     , {field: 'level_name', title: '等级', width: 120}
+                    , {field: 'status_msg', title: '状态', width: 100, templet: '#statusTpl'}
                     , {field: 'create_time', title: '创建时间', width: 120}
                     , {field: 'update_time', title: '更新时间', width: 120}
                     , {title: '操作', fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
@@ -118,7 +121,6 @@
                     });
                 } else if(layEvent === 'edit'){ //编辑
                     //do something
-                    //console.log(data);
                     layer.open({
                         type: 2,
                         title: '编辑',
@@ -135,6 +137,29 @@
                     });*/
                 } else if(layEvent === 'LAYTABLE_TIPS'){
                     layer.alert('Hi，头部工具栏扩展的右侧图标。');
+                } else if(layEvent === 'updateStatus'){ // 更新状态
+                    //console.log('ID', data.member_id);
+                    //console.log('status 1', data.status);
+
+                    // 重新给 状态status 赋值
+                    data.status = data.status == 1 ? 0 : 1;
+
+                    //同步更新缓存对应的值
+                    obj.update({
+                        status: data.status // 状态
+                    });
+
+                    // 更新DOM节点属性
+                    if (0 == data.status) {
+                        //console.log('status 20', data.status);
+                        $('input[name="status"][id="status' + data.member_id + '"]').attr({'value': 0, 'checked': false});
+                    } else {
+                        //console.log('status 21', data.status);
+                        $('input[name="status"][id="status' + data.member_id + '"]').attr({'value': 1, 'checked': true});
+                    }
+
+                    // 向服务端发送更新指令：ajax请求
+                    changeTableVal('member', 'member_id', data.member_id, 'status', data.status, this);
                 }
             });
 
@@ -152,6 +177,32 @@
 
         });
     }
+
+    /**
+     * 修改指定表的指定字段值
+     * TODO：在 /public/static/ 目录下（如果不存在）新建 common.js 文件，封装公用 ajax 方法，但是报错：Uncaught ReferenceError: changeTableVal is not defined
+     * @param table
+     * @param id_name
+     * @param id_value
+     * @param field
+     * @param field_value
+     * @param obj
+     */
+    function changeTableVal(table, id_name, id_value, field, field_value, obj)
+    {
+        $.ajax({
+            url: "{:url('base/changeTableVal')}",
+            data: {table: table, id_name: id_name, id_value: id_value, field: field, value: field_value},
+            success: function(data){
+                if(data.status == 1){ // 更新成功
+                    layer.msg(data.message, {icon: 1, time: 1000});
+                }else{ // 更新失败
+                    layer.msg(data.message, {icon: 2, time: 1000});
+                }
+            }
+        });
+    }
+
 </script>
 
 <!--toolbar - 绑定工具条模板，它可以存放在页面的任意位置 s-->
@@ -166,6 +217,20 @@
     {{#  } }}
 </script>
 <!--toolbar - 绑定工具条模板 e-->
+
+<!--templet - 自定义列模板 s-->
+<script type="text/html" id="statusTpl">
+    <!--状态 s-->
+    <a lay-event="updateStatus">
+        {{#  if (1 == d.status) { }}
+        <input type="checkbox" name="status" checked value="{{d.status}}" id="status{{d.member_id}}" lay-skin="switch" lay-text="启用|停用">
+        {{#  } else { }}
+        <input type="checkbox" name="status" value="{{d.status}}" id="status{{d.member_id}}" lay-skin="switch" lay-text="启用|停用">
+        {{#  } }}
+    </a>
+    <!--状态 e-->
+</script>
+<!--templet - 自定义列模板 e-->
 
 </body>
 </html>

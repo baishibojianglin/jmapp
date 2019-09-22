@@ -26,7 +26,7 @@ class Member extends Base
         $order = ['m.member_id' => 'asc'];
 
         $result = $this->alias('m')
-            ->field('m.member_id, m.member_name, m.level_id, m.avatar, m.phone, m.is_delete, m.create_time, m.update_time, m.production, m.advantage, ml.level_name') //排出字段 m.abstract, m.description, ml.level_id, ml.describe
+            ->field('m.member_id, m.member_name, m.level_id, m.avatar, m.phone, m.status, m.is_delete, m.create_time, m.update_time, m.production, m.advantage, ml.level_name') //排出字段 m.abstract, m.description, ml.level_id, ml.describe
             ->join('__MEMBER_LEVEL__ ml', 'm.level_id = ml.level_id', 'LEFT')
             ->where($map)
             ->order($order)
