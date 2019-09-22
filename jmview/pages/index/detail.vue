@@ -1,11 +1,13 @@
 <template>
 	<view>
 		<vrow>
-		    <vcol span="40">
-               <vrow>
-				   <image class="img" src="../../static/images/design_dlrb.jpg"></image>
+		    <vcol span="30">
+               <vrow class="content">
+				   <image class="img" :src="article_content.headimg"></image>
 			   </vrow>
-		    </vcol>				  
+		    </vcol>	
+		    <vcol span="60">
+		    </vcol>	
 		</vrow>
 	</view>
 </template>
@@ -43,5 +45,16 @@
 </script>
 
 <style>
-
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	.img {
+		width:150upx;
+		height:150upx;
+		border-radius: 100%;
+		margin: 15upx;
+	}
 </style>
