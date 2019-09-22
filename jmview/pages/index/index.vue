@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<vrow class="content" v-for="item in artitle_list">
+		<vrow class="content" v-for="item in article_list">
 		    <vcol span="100">
-			    <navigator url="detail" open-type="navigate">
+			    <navigator v-bind:url="'detail?titleid='+item.article_id" open-type="navigate">
 				  <image class="img" v-bind:src="item.thumb"></image>
 				</navigator>
 		    </vcol>				  
@@ -13,6 +13,9 @@
 			<vcol span="30">
 			    <vrow retract="1"><button class="button" @click="callphone(item.phone)">预约设计</button></vrow>
 			</vcol>
+		</vrow>
+		<vrow v-show="liststatus">
+			 <vcol class="nocontent" span='100'>网络正忙，请稍候...</vcol>
 		</vrow>
 	</view>
 </template>
@@ -27,7 +30,8 @@
 		},
 		data() {
 			return {
-		      artitle_list:[]
+		      article_list:[],
+			  liststatus:false
 			}
 		},
 		onLoad() {
@@ -37,7 +41,11 @@
 					url:'/dpc/index/Index/index',
 					method:'GET',
 					success:function(res){
-						self.artitle_list=res.data;
+						if(res.data.length!=0){
+						    self.article_list=res.data;
+						}else{
+							self.liststatus=true;
+						}
 					}
 				 })         
 		},
@@ -73,6 +81,11 @@
 		background:-o-linear-gradient(left,#695648,#82858A); /* Opera 11.1 - 12.0 */
 		color:#fff;
 		margin-top: 10upx;
+		font-size: 30upx;
+	}
+	.nocontent{
+		margin-top:60upx;
+		text-align: center;
 		font-size: 30upx;
 	}
 </style>

@@ -19,4 +19,9 @@
 	margin-top: 10rpx;
 	font-size: 30rpx;
 }
+.nocontent{
+	margin-top:60rpx;
+	text-align: center;
+	font-size: 30rpx;
+}
 
