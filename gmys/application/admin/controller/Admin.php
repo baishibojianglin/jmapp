@@ -103,7 +103,7 @@ class Admin extends Base
 
             // 处理参数
             $data['password'] = IAuth::encrypt($data['password']); //md5(config('app.password_pre_salt') . $data['password']);
-            $data['status'] = config('code.status_enable');
+            $data['status'] = isset($data['status']) ? $data['status'] : config('code.status_disable'); // 可以注释掉
 
             // 捕获异常
             try {
@@ -121,7 +121,7 @@ class Admin extends Base
                     db('auth_group_access')->insert($authGroupAccessData);
                 }
 
-                return show(config('code.success'), 'admin_id = ' . $id . '的管理员新增成功'); //$this->success('admin_id = ' . $id . '的管理员新增成功');
+                return show(config('code.success'), 'admin_id = ' . $id . '的管理员新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/admin/index']); //$this->success('admin_id = ' . $id . '的管理员新增成功');
             } else {
                 return show(config('code.error'), '管理员新增失败', [], 403); //$this->error('err');
             }
@@ -226,7 +226,7 @@ class Admin extends Base
                     db('auth_group_access')->where(['uid' => $id])->update(['group_id' => $param['group_id']]);
                 }
 
-                return show(config('code.success'), '更新成功', [], 201);
+                return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
             } else {
                 return show(config('code.error'), '更新失败', [], 403);
             }
@@ -268,12 +268,12 @@ class Admin extends Base
                 }
 
                 if (!$result) {
-                    return show(config('code.error'), '软删除失败');
+                    return show(config('code.error'), '软删除失败', ['url' => 'parent']);
                 } else {
                     // 删除管理员的Auth用户组
                     db('auth_group_access')->where(['uid' => $id])->delete();
 
-                    return show(config('code.success'), '软删除成功');
+                    return show(config('code.success'), '软删除成功', ['url' => 'delete']); //['url' => config('app.SERVER_NAME') . $this->module . '/admin/index']
                 }
             }
 
@@ -281,9 +281,9 @@ class Admin extends Base
             if ($data['is_delete'] == config('code.is_delete')) {
                 $result = model('Admin')->destroy($id);
                 if (!$result) {
-                    return show(config('code.error'), '删除失败');
+                    return show(config('code.error'), '删除失败', ['url' => 'parent']);
                 } else {
-                    return show(config('code.success'), '删除成功');
+                    return show(config('code.success'), '删除成功', ['url' => 'delete']);
                 }
             }
         } else {

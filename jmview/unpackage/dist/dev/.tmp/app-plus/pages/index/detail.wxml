@@ -1,0 +1,1 @@
+<view><vrow vue-id="1" bind:__l="__l" vue-slots="{{['default']}}"><vcol vue-id="{{('2')+','+('1')}}" span="40" bind:__l="__l" vue-slots="{{['default']}}"><vrow vue-id="{{('3')+','+('2')}}" bind:__l="__l" vue-slots="{{['default']}}"><image class="img" src="../../static/images/design_dlrb.jpg"></image></vrow></vcol></vrow></view>
