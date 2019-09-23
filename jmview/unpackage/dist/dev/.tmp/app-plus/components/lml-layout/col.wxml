@@ -1,1 +1,0 @@
-<view class="{{['data-v-048c44dd','col-'+span]}}"><slot></slot></view>
