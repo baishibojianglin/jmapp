@@ -57,6 +57,11 @@ class Member extends Base
 
             // 获取分页列表数据 模式一：基于paginate()自动化分页
             $data = model('Member')->getMember($map, $this->size);
+            $status = config('code.status');
+            foreach ($data as $key => $value) {
+                // 处理数据
+                $data[$key]['status_msg'] = $status[$value['status']]; // 定义status_msg
+            }
 
             return show(config('code.success'), 'OK', $data);
         }

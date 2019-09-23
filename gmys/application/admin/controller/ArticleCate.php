@@ -77,7 +77,7 @@ class ArticleCate extends Base
             // 处理数据
             foreach ($data as $key => $value) {
                 // 是否导航显示
-                $data[$key]['show_in_nav'] = $value['show_in_nav'] == 1 ? '是' : '否';
+                $data[$key]['show_in_nav_msg'] = $value['show_in_nav'] == 1 ? '显示' : '不显示';
 
                 if ($value['level'] != 0) {
                     // level 用于定义 title 前面的空位符的长度

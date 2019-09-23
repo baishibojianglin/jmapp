@@ -235,6 +235,12 @@ class Article extends Base
         if (false === $result) {
             return show(config('code.error'), '更新失败', [], 403);
         } else {
+
+            // 当为更新状态时，直接刷新当前页面
+            if (array_key_exists('status', $param) && count($param) == 2) { // 传入2个参数，其中一个是 status
+                return $this->redirect('article/index');
+            }
+
             return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
         }
     }

@@ -236,6 +236,51 @@ class Admin extends Base
     }
 
     /**
+     * 保存更新的管理员密码
+     * @param int $id
+     * @return \think\response\Json
+     * @throws ApiException
+     */
+    public function updateAdminPassword($id)
+    {
+        // 判断为PUT请求
+        if (request()->isPut()) {
+            // 传入的数据
+            $param = input('param.');
+
+            // validate验证
+            $validate = validate('Admin');
+            if (!$validate->check($param, [], 'update_password')) { // 更新密码场景
+                return show(config('code.error'), $validate->getError(), [], 403);
+            }
+
+            // 判断数据是否存在
+            $data = [];
+            if (!empty($param['password'])) {
+                $data['password'] = IAuth::encrypt($param['password']);
+            }
+
+            if (empty($data)) {
+                return show(config('code.error'), '数据不合法', [], 404);
+            }
+
+            // 更新
+            try {
+                $result = model('Admin')->save($data, ['admin_id' => $id]); // 更新
+            } catch (\Exception $e) {
+                throw new ApiException($e->getMessage(), 500, config('code.error'));
+            }
+            if ($result) {
+                return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
+            } else {
+                return show(config('code.error'), '更新失败', [], 403);
+            }
+        } else {
+            return show(config('code.error'), '请求不合法', [], 400);
+        }
+    }
+
+    /**
      * 删除指定管理员
      * @param int $id
      * @return \think\response\Json

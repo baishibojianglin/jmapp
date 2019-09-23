@@ -69,7 +69,7 @@
                     , {field: 'status_msg', title: '状态', width: 60}
                     , {field: 'create_time', title: '创建时间', width: 120}
                     , {field: 'update_time', title: '更新时间', width: 120}
-                    , {title: '操作', fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+                    , {title: '操作', fixed: 'right', width: 180, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
                 ]]
                 , url: '{:url("admin/article/getArticle")}' //数据接口
                 //,method: 'get' // 接口http请求类型，默认：get
@@ -140,6 +140,42 @@
                     });*/
                 } else if(layEvent === 'LAYTABLE_TIPS'){
                     layer.alert('Hi，头部工具栏扩展的右侧图标。');
+                } else if(layEvent === 'updateStatus'){ // 更新状态
+
+                    // 文章状态：0草稿，1通过，2待审核，3驳回，4发布，5下架
+                    var html = '<form action="{:url("admin/article/update")}?id=' + data.article_id + '" method="post" class="layui-form" lay-filter="layui_form" style="position: relative;top: 2rem;">' +
+                                //'<input type="hidden" name="article_id" value="' + data.article_id + '" />' +
+                                '<div class="layui-form-item">' +
+                                    '<label class="layui-form-label">文章状态</label>' +
+                                    '<div class="layui-input-block">' +
+                                        '<select name="status" id="status' + data.article_id + '" lay-verify="required" lay-ignore>' +
+                                            '<option value="">请选择…</option>' +
+                                            '<option value="0">草稿</option>' +
+                                            '<option value="1">通过</option>' +
+                                            '<option value="2">待审核</option>' +
+                                            '<option value="3">驳回</option>' +
+                                            '<option value="4">发布</option>' +
+                                            '<option value="5">下架</option>' +
+                                        '</select>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="layui-form-item">' +
+                                    '<div class="layui-input-block">' +
+                                        '<button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</form>';
+
+                    // 页面层
+                    layer.open({
+                        type: 1,
+                        title: '更新状态',
+                        //skin: 'layui-layer-rim', //加上边框
+                        area: ['420px', '240px'], //宽高
+                        content: html, // html内容
+                        maxmin: true
+                    });
+
                 }
             });
 
@@ -161,6 +197,7 @@
 
 <!--toolbar - 绑定工具条模板，它可以存放在页面的任意位置 s-->
 <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="updateStatus" title="更新文章审核状态">审核</a>
     <!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>--><!--注意：属性 lay-event="" 是模板的关键所在，值可随意定义。-->
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
