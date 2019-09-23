@@ -42,9 +42,10 @@
     </div>
 </div>
 
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<!--<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script src="__STATIC__/layui/layui.all.js"></script>
-<script src="__STATIC__/common/js/common.js"></script>
+<script src="__STATIC__/common/js/common.js"></script>-->
+{include file="public/_footer" /}
 <script>
 
     // 页面加载时执行
@@ -70,7 +71,7 @@
                     , {field: 'level', title: '级别', width: 80}
                     , {field: 'icon', title: '图标', width: 80, templet: '<div>{{#  if(d.icon){ }}<i class="layui-icon">{{d.icon}}</i>{{#  } }}</div>'
                     } // {{d.字段名}} 是固定写法，此处 d 代表 res.data（但是不能用 res.data ）
-                    , {field: 'sort', title: '排序', width: 80}
+                    , {field: 'sort', title: '排序', width: 90, templet: '#sortTpl'}
                     , {title: '操作', fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
                 ]]
                 , url: '{:url("admin/auth_rule/getAuthRule")}' //数据接口
@@ -152,6 +153,7 @@
 
         });
     }
+
 </script>
 
 <!--toolbar - 绑定工具条模板，它可以存放在页面的任意位置 s-->
@@ -166,6 +168,14 @@
     {{#  } }}
 </script>
 <!--toolbar - 绑定工具条模板 e-->
+
+<!--templet - 自定义列模板 s-->
+<!--排序 s-->
+<script type="text/html" id="sortTpl">
+    <input type="number" min="0" step="1" name="sort" value="{{d.sort}}" class="layui-input" style="height: 100%;" oninput="changeTableVal('auth_rule', 'id', '{{d.id}}', 'sort', this.value, this)">
+</script>
+<!--排序 e-->
+<!--templet - 自定义列模板 e-->
 
 </body>
 </html>

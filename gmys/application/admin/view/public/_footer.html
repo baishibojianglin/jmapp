@@ -1,3 +1,32 @@
 <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script src="__STATIC__/layui/layui.js"></script>
 <script src="__STATIC__/common/js/common.js"></script>
+
+<!--自定义公用js方法 s-->
+<script>
+    /**
+     * 修改指定表的指定字段值
+     * TODO：在 /public/static/ 目录下（如果不存在）新建 common.js 文件，封装公用 ajax 方法，但是报错：Uncaught ReferenceError: changeTableVal is not defined
+     * @param table
+     * @param id_name
+     * @param id_value
+     * @param field
+     * @param field_value
+     * @param obj
+     */
+    function changeTableVal(table, id_name, id_value, field, field_value, obj)
+    {
+        $.ajax({
+            url: "{:url('base/changeTableVal')}",
+            data: {table: table, id_name: id_name, id_value: id_value, field: field, value: field_value},
+            success: function(data){
+                if(data.status == 1){ // 更新成功
+                    layer.msg(data.message, {icon: 1, time: 1000});
+                }else{ // 更新失败
+                    layer.msg(data.message, {icon: 2, time: 1000});
+                }
+            }
+        });
+    }
+</script>
+<!--自定义公用js方法 e-->
