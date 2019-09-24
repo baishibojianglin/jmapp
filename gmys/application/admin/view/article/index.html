@@ -42,9 +42,9 @@
     </div>
 </div>
 
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-<script src="__STATIC__/layui/layui.all.js"></script>
-<script src="__STATIC__/common/js/common.js"></script>
+{include file="public/_footer" /}
+<!--<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="__STATIC__/layui/layui.all.js"></script>-->
 <script>
 
     // 页面加载时执行
@@ -142,7 +142,7 @@
                     layer.alert('Hi，头部工具栏扩展的右侧图标。');
                 } else if(layEvent === 'updateStatus'){ // 更新状态
 
-                    // 文章状态：0草稿，1通过，2待审核，3驳回，4发布，5下架
+                    // 1.文章状态：0草稿，1通过，2待审核，3驳回，4发布，5下架
                     var html = '<form action="{:url("admin/article/update")}?id=' + data.article_id + '" method="post" class="layui-form" lay-filter="layui_form" style="position: relative;top: 2rem;">' +
                                 //'<input type="hidden" name="article_id" value="' + data.article_id + '" />' +
                                 '<div class="layui-form-item">' +
@@ -166,7 +166,7 @@
                                 '</div>' +
                             '</form>';
 
-                    // 页面层
+                    // 2.页面层
                     layer.open({
                         type: 1,
                         title: '更新状态',
@@ -174,6 +174,15 @@
                         area: ['420px', '240px'], //宽高
                         content: html, // html内容
                         maxmin: true
+                    });
+
+                    // 3.option 添加“选中”属性（需放在页面弹出层 layer.open() 后面）
+                    //var arr = [];
+                    $('#status'+ data.article_id +' option').each(function () {
+                        //arr.push(this.value)
+                        if (this.value == data.status) {
+                            this.selected = 'selected';
+                        }
                     });
 
                 }

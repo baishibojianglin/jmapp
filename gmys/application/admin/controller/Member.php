@@ -193,6 +193,9 @@ class Member extends Base
         }
         if (!empty($param['avatar'])) {
             $data['avatar'] = trim($param['avatar']);
+
+            // 获取更新成功前的团队成员头像avatar
+            $member = model('Member')->field('avatar')->find($id);
         }
         if (!empty($param['description'])) {
             $data['description'] = $param['description'];
@@ -211,6 +214,12 @@ class Member extends Base
         if (false === $result) {
             return show(config('code.error'), '更新失败', [], 403);
         } else {
+            // 删除更新成功前的团队成员头像avatar文件
+            if (!empty($param['avatar'] && trim($param['avatar']) != $member['avatar'])) {
+                // 删除文件
+                unlink(ROOT_PATH . 'public' . DS . $member['avatar']);
+            }
+
             return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
         }
     }

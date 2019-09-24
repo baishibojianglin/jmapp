@@ -214,6 +214,9 @@ class Article extends Base
         }
         if (!empty($param['thumb'])) {
             $data['thumb'] = trim($param['thumb']);
+
+            // 获取更新成功前的文章缩略图thumb
+            $article = model('Article')->field('thumb')->find($id);
         }
         if (!empty($param['content'])) {
             $data['content'] = $param['content'];
@@ -239,6 +242,12 @@ class Article extends Base
             // 当为更新状态时，直接刷新当前页面
             if (array_key_exists('status', $param) && count($param) == 2) { // 传入2个参数，其中一个是 status
                 return $this->redirect('article/index');
+            }
+
+            // 删除更新成功前的文章缩略图thumb文件
+            if (!empty($param['thumb'] && trim($param['thumb']) != $article['thumb'])) {
+                // 删除文件
+                unlink(ROOT_PATH . 'public' . DS . $article['thumb']);
             }
 
             return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
