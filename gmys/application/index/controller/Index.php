@@ -16,13 +16,11 @@ class Index
     {
        //查文章内容
        $match_article['article_id']=$_POST['id'];
-       $content=Db::name('article')->where($match_article)->find();
-       //查设计师
-       $match_designer_id['id']=$content['designer_id'];
-       $designer=Db::name('auth_group')->where($match_designer_id)->find(); 
-       $content['headimg']=$designer['headimg'];
-       $content['name']=$designer['title'];
+       $content=Db::name('article')->alias('a')->join('member b','b.member_id=a.designer_id')->where($match_article)->find();
+       //$content=Db::name('article')->where($match_article)->find();
        return json($content);
+       
+
     }   
     
 }
