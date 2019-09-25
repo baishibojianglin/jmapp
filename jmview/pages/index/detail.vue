@@ -3,7 +3,7 @@
 		<vrow>
 		    <vcol span="30">
                <vrow class="content">
-				   <image class="img" :src="article_content.headimg"></image>
+				   <image class="img" :src="article_content.avatar"></image>
 			   </vrow>
 		    </vcol>	
 		    <vcol span="60">
