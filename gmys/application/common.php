@@ -62,10 +62,30 @@ function upload($name = 'file', $dir = '')
             return $info->getPathname();
         } else {
             // 上传失败删除文件
-            //unlink($info->getPathname()); //提示 Permission denied
+            @unlink($info->getPathname()); //提示 Permission denied
 
             // 上传失败获取错误信息
             return $file->getError();
         }
     }
+}
+
+/**
+ * 生成缩略图
+ * @param string $fileInfo 上传信息
+ * @param int $width
+ * @param int $height
+ */
+function imageThumb($fileInfo = '', $width = 150, $height = 150)
+{
+    // 使用open方法打开图像文件进行相关操作
+    $image = \think\Image::open($fileInfo);
+    // 直接获取当前请求中的文件上传对象
+    //$image = \think\Image::open(request()->file($name = 'image'));
+
+    // 删除原图（好像下面生成缩略图并保存的步骤也会删除原图）
+    //unlink($fileInfo);
+
+    // 按照原图的比例生成一个最大为 $width*$height 的缩略图并保存为 $fileInfo
+    $image->thumb($width, $height)->save($fileInfo);
 }

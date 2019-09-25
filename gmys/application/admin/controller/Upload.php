@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Controller;
+use think\Image;
 use think\Request;
 
 /**
@@ -20,8 +21,31 @@ class Upload extends Base
      */
     public function upload($name, $dir)
     {
+        // 获取上传信息
         $fileInfo = upload($name, $dir);
         if ($fileInfo) {
+            return show(config('code.success'), '上传成功', $fileInfo);
+        } else {
+            return show(config('code.error'), $fileInfo, [], 404);
+        }
+    }
+
+    /**
+     * 上传图片并生成缩略图
+     * @param string $name
+     * @param string $dir
+     * @param int $width
+     * @param int $height
+     * @return \think\response\Json
+     */
+    public function uploadThumb($name = 'file', $dir = '', $width = 200, $height = 200)
+    {
+        // 获取上传信息
+        $fileInfo = upload($name, $dir);
+        if ($fileInfo) {
+            // 生成缩略图
+            imageThumb($fileInfo, $width, $height);
+
             return show(config('code.success'), '上传成功', $fileInfo);
         } else {
             return show(config('code.error'), $fileInfo, [], 404);
