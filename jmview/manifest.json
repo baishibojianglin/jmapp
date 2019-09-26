@@ -83,11 +83,11 @@
 			 "port": 8080,
 			 "disableHostCheck": true,
 			 "proxy":{
-				"/dpc":{
+				"/api":{
 					"target":"http://jm.dilinsat.com/index.php",
 					"changeOrigin": true,
 					"secure":false,
-					"pathRewrite":{"^/dpc":""}
+					"pathRewrite":{"^/api":""}
 				} 
 			 }
 		}

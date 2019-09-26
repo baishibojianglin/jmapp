@@ -1,24 +1,29 @@
 <template>
 	<view class="content">
 		<vrow class="borbottom">
-		    <vcol span="35" class="center fon25">
+		    <vcol span="30" class="center fon25">
                <vrow>
 				   <image class="img" :src="content.avatar"></image>
 			   </vrow>
 			   <vrow class="designname">设计师：{{content.member_name}}</vrow>
 		    </vcol>	
-		    <vcol span="65" class="center fon25 colheight">
+		    <vcol span="70" class="center fon25 colheight">
                 <vrow class="colheight-vrow">
-					<vcol span="21">风格</vcol>
-					<vcol span="21">大小</vcol>
-					<vcol span="21">造价</vcol>
+					<vcol span="23" class="colright">风格</vcol>
+					<vcol span="23" class="colright">大小</vcol>
+					<vcol span="23">造价</vcol>
 				</vrow>
 				<vrow>
-					<vcol span="21">{{content.keywords}}</vcol>
-					<vcol span="21">{{content.area}}</vcol>
-					<vcol span="21">{{content.price}}</vcol>
+					<vcol span="23" class="colright">{{content.keywords}}</vcol>
+					<vcol span="23" class="colright">{{content.area}}</vcol>
+					<vcol span="23">{{content.price}}</vcol>
 				</vrow>
 		    </vcol>	
+		</vrow>
+		<vrow>
+			<vcol span="100">
+				<rich-text :nodes="content.content"></rich-text>
+			</vcol>	
 		</vrow>
 	</view>
 </template>
@@ -41,11 +46,12 @@
 	        //加载文章详情内容
 	         var self=this;
 	         uni.request({
-	        	url:'/dpc/index/Index/detail',
+	        	url:'/api/index/Index/detail',
 				data:{id:options.titleid},
 	        	method:'POST',
 				header:{'content-type':'application/x-www-form-urlencoded'},
 	        	success:function(res){
+					res.data.avatar=self.$url+res.data.avatar.replace(/\\/g, "/");//拼接处理图片路径
 	        		self.content=res.data;
 	        	}
 	         }) 
@@ -65,7 +71,7 @@
 	}
 	.borbottom{
 		background:-webkit-linear-gradient(left,#82858A,#695648); /* Safari 5.1 - 6.0 */
-		background:linear-gradient(left,#82858A,#695648);/*chrom*/
+		background:linear-gradient(left,#82858A,#0F2822);/*chrom*/
 		background:-ms-linear-gradient(left,#82858A,#695648);/* IE 10 */
 		background:-moz-linear-gradient(left,#82858A,#695648);/*火狐*/ 
 		background:-o-linear-gradient(left,#82858A,#695648); /* Opera 11.1 - 12.0 */
@@ -87,10 +93,6 @@
 		border-radius: 100%;
 		margin: 15upx;
 	}
-	.mp0{
-		margin: 0;
-		padding: 0;
-	}
 	.colheight{
 		line-height: 100upx;
 		color:#fff;
@@ -102,4 +104,8 @@
 	.designname{
 		padding-bottom: 10upx;
 	}
+	.colright{
+		border-right: 1px solid #E3E0D5;
+	}
+
 </style>
