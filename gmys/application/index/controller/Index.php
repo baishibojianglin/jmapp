@@ -20,7 +20,6 @@ class Index
        //$content=Db::name('article')->where($match_article)->find();
        return json($content);
        
-
     }   
     
 }
