@@ -17,10 +17,8 @@ class Index
        //查文章内容
        $match_article['article_id']=$_POST['id'];
        $content=Db::name('article')->alias('a')->join('member b','b.member_id=a.designer_id')->where($match_article)->find();
-       //$content=Db::name('article')->where($match_article)->find();
        return json($content);
        
-
     }   
     
 }

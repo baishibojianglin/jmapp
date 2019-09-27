@@ -38,7 +38,7 @@
 			    //默认加载文章列表
 			     var self=this;
 				 uni.request({
-					url:'/dpc/index/Index/index',
+					url:'/api/index/Index/index',
 					method:'GET',
 					success:function(res){
 						if(res.data.length!=0){
