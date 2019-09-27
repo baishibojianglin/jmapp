@@ -3,11 +3,11 @@
 <script src="__STATIC__/layui/layui.all.js"></script>
 <script src="__STATIC__/common/js/common.js"></script>
 
-<!--×Ô¶¨Òå¹«ÓÃjs·½·¨ s-->
+<!--è‡ªå®šä¹‰å…¬ç”¨jsæ–¹æ³• s-->
 <script>
     /**
-     * ĞŞ¸ÄÖ¸¶¨±íµÄÖ¸¶¨×Ö¶ÎÖµ
-     * TODO£ºÔÚ /public/static/ Ä¿Â¼ÏÂ£¨Èç¹û²»´æÔÚ£©ĞÂ½¨ common.js ÎÄ¼ş£¬·â×°¹«ÓÃ ajax ·½·¨£¬µ«ÊÇ±¨´í£ºUncaught ReferenceError: changeTableVal is not defined
+     * ä¿®æ”¹æŒ‡å®šè¡¨çš„æŒ‡å®šå­—æ®µå€¼
+     * TODOï¼šåœ¨ /public/static/ ç›®å½•ä¸‹ï¼ˆå¦‚æœä¸å­˜åœ¨ï¼‰æ–°å»º common.js æ–‡ä»¶ï¼Œå°è£…å…¬ç”¨ ajax æ–¹æ³•ï¼Œä½†æ˜¯æŠ¥é”™ï¼šUncaught ReferenceError: changeTableVal is not defined
      * @param table
      * @param id_name
      * @param id_value
@@ -21,13 +21,13 @@
             url: "{:url('base/changeTableVal')}",
             data: {table: table, id_name: id_name, id_value: id_value, field: field, value: field_value},
             success: function(data){
-                if(data.status == 1){ // ¸üĞÂ³É¹¦
+                if(data.status == 1){ // æ›´æ–°æˆåŠŸ
                     layer.msg(data.message, {icon: 1, time: 1000});
-                }else{ // ¸üĞÂÊ§°Ü
+                }else{ // æ›´æ–°å¤±è´¥
                     layer.msg(data.message, {icon: 2, time: 1000});
                 }
             }
         });
     }
 </script>
-<!--×Ô¶¨Òå¹«ÓÃjs·½·¨ e-->
+<!--è‡ªå®šä¹‰å…¬ç”¨jsæ–¹æ³• e-->
