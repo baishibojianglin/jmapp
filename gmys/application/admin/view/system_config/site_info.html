@@ -1,0 +1,231 @@
+{include file="public/_meta" /}
+<!--<link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all">-->
+<link href="__STATIC__/umeditor/umeditor1_2_2-utf8-php/themes/default/css/umeditor.css" type="text/css" rel="stylesheet"><!--UMeditor css部分-->
+</head>
+<body class="layui-view-body">
+<div class="layui-content">
+    <div class="layui-page-header" >
+        <div class="pagewrap">
+            <span class="layui-breadcrumb">
+                <a href="">首页</a>
+                <a href="">设置</a>
+                <a href="javascript:;"><cite>网站信息</cite></a>
+            </span>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-card">
+            <div class="layui-card-header">编辑网站信息</div>
+            <div class="layui-card-body">
+
+                <form class="layui-form" lay-filter="layui_form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">网站备案号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="record_no" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">网站名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="site_name" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">网站logo</label>
+                        <button type="button" class="layui-btn" id="site_logo">
+                            <i class="layui-icon">&#xe67c;</i>上传图片
+                        </button>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">网站标题</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="site_title" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">网站描述</label>
+                        <div class="layui-input-block">
+                            <textarea name="site_description" placeholder="请输入内容，限200字符" class="layui-textarea" maxlength="200"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">网站关键字</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="site_keyword" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">联系人</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="contact" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">联系电话</label>
+                        <div class="layui-input-block">
+                            <input type="tel" name="phone" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="phone">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">联系邮箱</label>
+                        <div class="layui-input-block">
+                            <input type="email" name="email" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="email">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">详细地址</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="address" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">客服QQ</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="qq" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-input-block layui-form-mid layui-word-aux">多个QQ号以英文逗号“,”分隔，如：123…,456…,789…</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">客服微信</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="wechat_id" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-input-block layui-form-mid layui-word-aux">多个微信号以英文逗号“,”分隔，如：abc…,def…,5hi…</div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">网站介绍</label>
+                        <div class="layui-input-block">
+                            <!-- UMeditor 加载编辑器的容器 -->
+                            <script type="text/plain" id="container" name="site_introduction" class="layui-textarea" style="height: 240px;"></script>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">提 交</button>
+                            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                        </div>
+                    </div>
+                    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<script src="__STATIC__/layui/layui.js"></script>-->
+{include file="public/_footer" /}
+
+<!--UMeditor js部分 s-->
+<script type="text/javascript" src="__STATIC__/umeditor/umeditor1_2_2-utf8-php/third-party/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="__STATIC__/umeditor/umeditor1_2_2-utf8-php/umeditor.config.js"></script><!-- 配置文件 -->
+<script type="text/javascript" charset="utf-8" src="__STATIC__/umeditor/umeditor1_2_2-utf8-php/umeditor.min.js"></script><!-- 编辑器源码文件 -->
+<script type="text/javascript" src="__STATIC__/umeditor/umeditor1_2_2-utf8-php/lang/zh-cn/zh-cn.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    // 实例化编辑器
+    var um = UM.getEditor('container');
+</script>
+<!--UMeditor js部分 e-->
+
+<script>
+    // 声明全局变量
+    var site_logo; // 声明头像路径变量
+
+    /**
+     * 表单模块 - layui.form
+     */
+    layui.use('form', function(){
+        var form = layui.form;
+
+        // 给表单赋值
+        /*ajax GET请求 s*/
+        $.ajax({
+            url: '{:url("admin/system_config/getSiteInfo")}',
+            type: 'get',
+            //data: {key: 'value'},
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+                //console.log(data);
+
+                // 给表单赋值
+                form.val("layui_form", { //layui_form 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+                    "record_no": data.data.record_no // "name": "value"
+                    ,"site_name": data.data.site_name
+                    ,"site_title": data.data.site_title
+                    ,"site_description": data.data.site_description
+                    ,"site_keyword": data.data.site_keyword
+                    ,"contact": data.data.contact
+                    ,"phone": data.data.phone
+                    ,"email": data.data.email
+                    ,"address": data.data.address
+                    ,"qq": data.data.qq
+                    ,"wechat_id": data.data.wechat_id
+                });
+
+                // 显示文章缩略图site_logo并赋值
+                $('#site_logo').after(' <img src="/' + data.data.site_logo + '" alt="' + data.data.site_logo + '" title="' + data.data.site_logo + '" class="layui-upload-img" width="200">');
+                site_logo = data.data.site_logo;
+
+                // 给网站介绍site_introduction赋值
+                $('#container').html(data.data.site_introduction);
+
+            }
+        });
+        /*ajax GET请求 e*/
+
+        // 监听submit提交
+        form.on('submit(*)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+
+            // 判断头像是否已上传
+            if(!site_logo) {
+                layer.msg('请上传头像', {icon: 7});
+                return false;
+            }
+            data.field.site_logo = site_logo; // 对 site_logo 字段赋值
+            data.field.site_introduction = $('#container').html(); // 对 site_introduction 字段赋值
+            //console.log(data.field); // 对 site_logo 字段赋值后，测试是否赋值成功
+
+            /*ajax请求 s*/
+            // TODO：在 /public/static/ 目录下新建 common.js 文件，封装公用 ajax 方法
+            var _data = data.field;
+            var url = "{:url('admin/system_config/update')}";
+            ajaxRequest(url, 'put', _data);
+            /*ajax请求 e*/
+
+            return false; // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+
+    /**
+     * 图片/文件上传 - layui.upload
+     */
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#site_logo' //绑定元素
+            ,url: '{:url("admin/upload/uploadThumb")}' //上传接口
+            ,data: {name: "site_logo", dir: "logo"}
+            ,field: 'site_logo' // 设定文件域的字段名
+            ,done: function(res){
+                //上传完毕回调
+                site_logo = res.data; // 获取头像路径值
+                //console.log(site_logo);
+                if (site_logo) {
+                    //$('#site_logo').hide();
+                    $('#site_logo').next().remove('img');
+                    $('#site_logo').after(' <img src="/' + site_logo + '" alt="" title="' + site_logo + '" class="layui-upload-img" width="200">');
+                }
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+    });
+</script>
+</body>
+</html>
