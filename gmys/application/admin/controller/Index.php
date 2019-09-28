@@ -11,6 +11,20 @@ class Index extends Base
 
     public function console()
     {
-        return $this->fetch();
+        // php获取今日开始时间戳和结束时间戳
+        $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+
+        $memberCount = model('Member')->count(); // 团队成员数
+        $memberCountToday = model('Member')->where('create_time', 'between time', [$beginToday, $endToday])->count(); // 今日新增团队成员数
+        $articleCount = model('Article')->count(); // 设计作品数
+        $articleCountToday = model('Article')->where('create_time', 'between time', [$beginToday, $endToday])->count(); // 今日新增设计作品数
+
+        return $this->fetch('', [
+            'memberCount' => $memberCount,
+            'memberCountToday' => $memberCountToday,
+            'articleCount' => $articleCount,
+            'articleCountToday' => $articleCountToday,
+        ]);
     }
 }
