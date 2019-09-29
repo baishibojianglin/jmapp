@@ -64,6 +64,7 @@ class Article extends Base
                 // 文章类别
                 $articleCate = db('article_cate')->field('cate_name')->where('cate_id', $value['cate_id'])->find();
                 $data[$key]['cate_name'] = $articleCate['cate_name'];
+                if ($value['cate_id'] == 0) {$data[$key]['cate_name'] = '其他';}
 
                 // 定义status_msg
                 $data[$key]['status_msg'] = $this->status[$value['status']];
@@ -81,7 +82,8 @@ class Article extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['articleCateTree' => ArticleCate::_articleCateTree()]);
+            $member = model('Member')->field('member_id, member_name')->select();
+            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'member' => $member]);
         }
     }
 
@@ -158,7 +160,8 @@ class Article extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['articleCateTree' => ArticleCate::_articleCateTree()]);
+            $member = model('Member')->field('member_id, member_name')->select();
+            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'member' => $member]);
         }
     }
 
@@ -206,8 +209,8 @@ class Article extends Base
         if (!empty($param['price'])) {
             $data['price'] = trim($param['price']);
         }
-        if (!empty($param['designer'])) {
-            $data['designer'] = trim($param['designer']);
+        if (isset($param['designer_id'])) {
+            $data['designer_id'] = trim($param['designer_id']);
         }
         if (!empty($param['phone'])) {
             $data['phone'] = trim($param['phone']);

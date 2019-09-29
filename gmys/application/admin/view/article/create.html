@@ -36,10 +36,10 @@
                         <div class="layui-input-block">
                             <select name="cate_id" lay-filter="cate_id" lay-verify="required">
                                 <option value="">请选择…</option>
-                                <option value="0">顶级分类</option>
                                 {volist name="articleCateTree" id="vo"}
                                 <option value="{$vo.cate_id}">{$vo.cate_name}<br/></option>
                                 {/volist}
+                                <option value="0">其他</option>
                             </select>
                         </div>
                     </div>
@@ -82,7 +82,14 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">设计师</label>
                         <div class="layui-input-block">
-                            <input type="text" name="designer" placeholder="请输入" autocomplete="off" class="layui-input">
+                            <!--<input type="text" name="designer" placeholder="请输入" autocomplete="off" class="layui-input">-->
+                            <select name="designer_id" lay-filter="designer_id" lay-verify="required">
+                                <option value="">请选择…</option>
+                                {volist name="member" id="vo"}
+                                <option value="{$vo.member_id}">{$vo.member_name}<br/></option>
+                                {/volist}
+                                <option value="0">其他</option>
+                            </select>
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -93,7 +100,7 @@
                     </div>
                     <div class="layui-form-item layui-form-text">
                         <label class="layui-form-label">文章内容</label>
-                        <div class="layui-input-block">
+                        <div class="layui-input-block" style="position: relative;z-index: 0">
                             <!--<textarea placeholder="请输入内容" class="layui-textarea" id="content" style="display: none;"></textarea>-->
                             <!-- UMeditor 加载编辑器的容器 -->
                             <script type="text/plain" id="container" name="content" class="layui-textarea" style="height: 240px;"></script>
