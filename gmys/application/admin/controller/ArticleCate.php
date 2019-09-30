@@ -13,6 +13,17 @@ use think\Request;
  */
 class ArticleCate extends Base
 {
+    private $cateType = []; // 文章类别分组
+
+    /**
+     * 初始化
+     */
+    public function _initialize()
+    {
+        parent::_initialize();
+        $this->cateType = config('code.cate_type');
+    }
+
     /**
      * 显示文章类别资源列表
      * @return \think\response\Json
@@ -102,8 +113,7 @@ class ArticleCate extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            $cateType = config('code.cate_type'); // 文章类别分组
-            return view('', ['cateType' => $cateType, 'articleCateTree' => $this->_articleCateTree()]);
+            return view('', ['cateType' => $this->cateType, 'articleCateTree' => $this->_articleCateTree()]);
         }
     }
 
@@ -176,8 +186,7 @@ class ArticleCate extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            $cateType = config('code.cate_type'); // 文章类别分组
-            return view('', ['cateType' => $cateType, 'articleCateTree' => $this->_articleCateTree()]);
+            return view('', ['cateType' => $this->cateType, 'articleCateTree' => $this->_articleCateTree()]);
         }
     }
 
