@@ -82,8 +82,18 @@ class Article extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
+            // 定义顶级类别分组说明
+            $cateType = config('code.cate_type'); // 文章类别分组
+            $cateTypeDescription = []; // 顶级类别分组说明
+            foreach ($cateType as $key => $value) {
+                $cateTypeDescription[] = $key . ' ' . $value;
+            }
+            $cateTypeDescription = implode('，', $cateTypeDescription);
+
+            // 获取设计师
             $member = model('Member')->field('member_id, member_name')->select();
-            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'member' => $member]);
+
+            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'cateTypeDescription' => $cateTypeDescription, 'member' => $member]);
         }
     }
 
@@ -160,8 +170,18 @@ class Article extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
+            // 定义顶级类别分组说明
+            $cateType = config('code.cate_type'); // 文章类别分组
+            $cateTypeDescription = []; // 顶级类别分组说明
+            foreach ($cateType as $key => $value) {
+                $cateTypeDescription[] = $key . ' ' . $value;
+            }
+            $cateTypeDescription = implode('，', $cateTypeDescription);
+
+            // 获取设计师
             $member = model('Member')->field('member_id, member_name')->select();
-            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'member' => $member]);
+
+            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'cateTypeDescription' => $cateTypeDescription, 'member' => $member]);
         }
     }
 

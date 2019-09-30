@@ -78,7 +78,7 @@ class ArticleCate extends Base
             $cateType = config('code.cate_type'); // 文章类别分组
             foreach ($data as $key => $value) {
                 // 定义文章类别分组名称
-                $data[$key]['cate_type'] = $cateType[$value['cate_type']];
+                $data[$key]['cate_type_msg'] = $cateType[$value['cate_type']];
 
                 // 是否导航显示
                 $data[$key]['show_in_nav_msg'] = $value['show_in_nav'] == 1 ? '显示' : '不显示';
