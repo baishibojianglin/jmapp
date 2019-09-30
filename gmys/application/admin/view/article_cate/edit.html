@@ -31,6 +31,18 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
+                        <label class="layui-form-label">分组</label>
+                        <div class="layui-input-inline">
+                            <select name="cate_type" lay-filter="cate_type" lay-verify="required">
+                                <option value="">请选择…</option>
+                                {volist name="cateType" id="vo"}
+                                <option value="{$key}">{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">文章分类菜单或所属分类的文章显示的位置</div>
+                    </div>
+                    <div class="layui-form-item">
                         <label class="layui-form-label">上级分类</label>
                         <div class="layui-input-block">
                             <select name="parent_id" lay-filter="parent_id" lay-verify="required">
@@ -104,6 +116,7 @@
                 form.val("layui_form", { //layui_form 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
                     "cate_name": data.data.cate_name // "name": "value"
                     ,"cate_alias": data.data.cate_alias
+                    ,"cate_type": data.data.cate_type
                     ,"parent_id": data.data.parent_id
                     ,"keywords": data.data.keywords
                     ,"show_in_nav": data.data.show_in_nav

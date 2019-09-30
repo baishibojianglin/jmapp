@@ -75,7 +75,11 @@ class ArticleCate extends Base
 
         if ($data) {
             // 处理数据
+            $cateType = config('code.cate_type'); // 文章类别分组
             foreach ($data as $key => $value) {
+                // 定义文章类别分组名称
+                $data[$key]['cate_type'] = $cateType[$value['cate_type']];
+
                 // 是否导航显示
                 $data[$key]['show_in_nav_msg'] = $value['show_in_nav'] == 1 ? '显示' : '不显示';
 
@@ -98,7 +102,8 @@ class ArticleCate extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['articleCateTree' => $this->_articleCateTree()]);
+            $cateType = config('code.cate_type'); // 文章类别分组
+            return view('', ['cateType' => $cateType, 'articleCateTree' => $this->_articleCateTree()]);
         }
     }
 
@@ -171,7 +176,8 @@ class ArticleCate extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['articleCateTree' => $this->_articleCateTree()]);
+            $cateType = config('code.cate_type'); // 文章类别分组
+            return view('', ['cateType' => $cateType, 'articleCateTree' => $this->_articleCateTree()]);
         }
     }
 
@@ -200,6 +206,9 @@ class ArticleCate extends Base
         }
         if (!empty($param['cate_alias'])) {
             $data['cate_alias'] = trim($param['cate_alias']);
+        }
+        if (isset($param['cate_type'])) {
+            $data['cate_type'] = $param['cate_type'];
         }
         if (isset($param['parent_id'])) {
             $data['parent_id'] = $param['parent_id'];
