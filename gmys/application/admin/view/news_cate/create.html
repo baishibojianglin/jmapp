@@ -8,16 +8,16 @@
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
                 <a href="">文章</a>
-                <a href="javascript:;"><cite>文章列表</cite></a>
+                <a href="javascript:history.go(-1)"><cite>文章分类 <i title="返回" class="layui-btn layui-btn-xs layui-icon layui-icon-return"></i></cite></a>
             </span>
         </div>
     </div>
     <div class="layui-row">
         <div class="layui-card">
-            <div class="layui-card-header">编辑文章分类</div>
+            <div class="layui-card-header">添加文章分类</div>
             <div class="layui-card-body">
 
-                <form class="layui-form" lay-filter="layui_form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+                <form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
                     <div class="layui-form-item">
                         <label class="layui-form-label">分类名称</label>
                         <div class="layui-input-block">
@@ -30,25 +30,25 @@
                             <input type="text" name="cate_alias" placeholder="请输入" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                    <div class="layui-form-item">
+                    <!--<div class="layui-form-item">
                         <label class="layui-form-label">分组</label>
                         <div class="layui-input-inline">
                             <select name="cate_type" lay-filter="cate_type" lay-verify="required">
                                 <option value="">请选择…</option>
-                                {volist name="cateType" id="vo"}
+                                {volist name="newsCateType" id="vo"}
                                 <option value="{$key}">{$vo}</option>
                                 {/volist}
                             </select>
                         </div>
                         <div class="layui-form-mid layui-word-aux">文章分类菜单或所属分类的文章显示的位置</div>
-                    </div>
+                    </div>-->
                     <div class="layui-form-item">
                         <label class="layui-form-label">上级分类</label>
                         <div class="layui-input-block">
                             <select name="parent_id" lay-filter="parent_id" lay-verify="required">
                                 <option value="">请选择…</option>
                                 <option value="0">顶级分类</option>
-                                {volist name="articleCateTree" id="vo"}
+                                {volist name="newsCateTree" id="vo"}
                                 <option value="{$vo.cate_id}">{$vo.cate_name}</option>
                                 {/volist}
                             </select>
@@ -82,7 +82,7 @@
                     <div class="layui-form-item">
                         <div class="layui-input-block">
                             <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
-                            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                         </div>
                     </div>
                     <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
@@ -103,31 +103,6 @@
     layui.use('form', function(){
         var form = layui.form;
 
-        // 给表单赋值
-        /*ajax GET请求 s*/
-        $.ajax({
-            url: '{:url("admin/article_cate/read")}',
-            type: 'get',
-            data: {id: '{$_GET["id"]}'}, // {$_GET["id"]} 为 admin/article_cate 控制器 edit($id) 方法的 $id 参数值
-            dataType: 'json',
-            success: function (data, textStatus, jqXHR) {
-
-                // 给表单赋值
-                form.val("layui_form", { //layui_form 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
-                    "cate_name": data.data.cate_name // "name": "value"
-                    ,"cate_alias": data.data.cate_alias
-                    ,"cate_type": data.data.cate_type
-                    ,"parent_id": data.data.parent_id
-                    ,"keywords": data.data.keywords
-                    ,"show_in_nav": data.data.show_in_nav
-                    ,"cate_description": data.data.cate_description
-                    ,"sort": data.data.sort
-                });
-
-            }
-        });
-        /*ajax GET请求 e*/
-
         // 监听submit提交
         form.on('submit(*)', function(data){
             //layer.msg(JSON.stringify(data.field));
@@ -135,7 +110,7 @@
             /*ajax请求 s*/
             // TODO：在 /public/static/ 目录下新建 common.js 文件，封装公用 ajax 方法
             var _data = data.field;
-            var url = "{:url('admin/article_cate/update', array('id' => $_GET['id']))}";
+            var url = "{:url('admin/news_cate/save')}";
             ajaxRequest(url, 'post', _data);
             /*ajax请求 e*/
 

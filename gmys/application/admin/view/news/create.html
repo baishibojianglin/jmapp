@@ -8,41 +8,41 @@
         <div class="pagewrap">
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
-                <a href="">文章</a>
-                <a href="javascript:;"><cite>文章列表</cite></a>
+                <a href="">新闻动态</a>
+                <a href="javascript:history.go(-1)"><cite>新闻列表 <i title="返回" class="layui-btn layui-btn-xs layui-icon layui-icon-return"></i></cite></a>
             </span>
         </div>
     </div>
     <div class="layui-row">
         <div class="layui-card">
-            <div class="layui-card-header">编辑文章</div>
+            <div class="layui-card-header">添加新闻</div>
             <div class="layui-card-body">
 
-                <form class="layui-form" lay-filter="layui_form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+                <form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
                     <div class="layui-form-item">
-                        <label class="layui-form-label">文章标题</label>
+                        <label class="layui-form-label">新闻标题</label>
                         <div class="layui-input-block">
                             <input type="text" name="title" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">文章作者</label>
+                        <label class="layui-form-label">新闻作者</label>
                         <div class="layui-input-block">
                             <input type="text" name="author" placeholder="请输入" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">类别/分组</label>
+                        <label class="layui-form-label">类别<!--/分组--></label>
                         <div class="layui-input-block">
                             <select name="cate_id" lay-filter="cate_id" lay-verify="required">
                                 <option value="">请选择…</option>
-                                {volist name="articleCateTree" id="vo"}
-                                <option value="{$vo.cate_id}">{$vo.cate_name}{if condition="$vo.parent_id == 0"}/{$vo.cate_type}{/if}</option>
+                                {volist name="newsCateTree" id="vo"}
+                                <option value="{$vo.cate_id}">{$vo.cate_name}</option><!--{if condition="$vo.parent_id == 0"}/{$vo.cate_type}{/if}-->
                                 {/volist}
                                 <option value="0">其他</option>
                             </select>
                         </div>
-                        <div class="layui-input-block layui-form-mid layui-word-aux">顶级类别分组：{$cateTypeDescription}</div>
+                        <!--<div class="layui-input-block layui-form-mid layui-word-aux">顶级类别分组：{$cateTypeDescription}</div>-->
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">关键字</label>
@@ -51,56 +51,19 @@
                         </div>
                     </div>
                     <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">文章摘要</label>
+                        <label class="layui-form-label">新闻摘要</label>
                         <div class="layui-input-block">
                             <textarea name="article_abstract" placeholder="请输入内容，限200字符" class="layui-textarea" maxlength="200" lay-verify="required"></textarea>
                         </div>
                     </div>
                     <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">文章缩略图</label>
+                        <label class="layui-form-label">新闻缩略图</label>
                         <button type="button" class="layui-btn" id="thumb">
                             <i class="layui-icon">&#xe67c;</i>上传图片
                         </button>
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">户型</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="house_type" placeholder="请输入" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">面积</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="area" placeholder="请输入" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">装修价格</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="price" placeholder="请输入" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">设计师</label>
-                        <div class="layui-input-block">
-                            <!--<input type="text" name="designer" placeholder="请输入" autocomplete="off" class="layui-input">-->
-                            <select name="designer_id" lay-filter="designer_id" lay-verify="required">
-                                <option value="">请选择…</option>
-                                {volist name="member" id="vo"}
-                                <option value="{$vo.member_id}">{$vo.member_name}</option>
-                                {/volist}
-                                <option value="0">其他</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">联系电话</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="phone" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required|phone">
-                        </div>
-                    </div>
                     <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">文章内容</label>
+                        <label class="layui-form-label">新闻内容</label>
                         <div class="layui-input-block" style="position: relative;z-index: 0">
                             <!--<textarea placeholder="请输入内容" class="layui-textarea" id="content" style="display: none;"></textarea>-->
                             <!-- UMeditor 加载编辑器的容器 -->
@@ -110,7 +73,7 @@
                     <div class="layui-form-item">
                         <div class="layui-input-block">
                             <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
-                            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                         </div>
                     </div>
                     <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
@@ -138,7 +101,7 @@
 
 <script>
     // 声明全局变量
-    var thumb; // 声明文章缩略图路径变量
+    var thumb; // 声明新闻缩略图路径变量
 
     /**
      * 表单模块 - layui.form
@@ -146,57 +109,22 @@
     layui.use('form', function(){
         var form = layui.form;
 
-        // 给表单赋值
-        /*ajax GET请求 s*/
-        $.ajax({
-            url: '{:url("admin/article/read")}',
-            type: 'get',
-            data: {id: '{$_GET["id"]}'}, // {$_GET["id"]} 为 admin/article 控制器 edit($id) 方法的 $id 参数值
-            dataType: 'json',
-            success: function (data, textStatus, jqXHR) {
-
-                // 给表单赋值
-                form.val("layui_form", { //layui_form 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
-                    "title": data.data.title // "name": "value"
-                    ,"author": data.data.author
-                    ,"cate_id": data.data.cate_id
-                    ,"keywords": data.data.keywords
-                    ,"article_abstract": data.data.article_abstract
-                    ,"house_type": data.data.house_type
-                    ,"area": data.data.area
-                    ,"price": data.data.price
-                    ,"designer_id": data.data.designer_id
-                    ,"phone": data.data.phone
-                });
-
-                // 显示文章缩略图thumb并赋值
-                $('#thumb').after(' <img src="/' + data.data.thumb + '" alt="' + data.data.thumb + '" title="' + data.data.thumb + '" class="layui-upload-img" width="200">');
-                thumb = data.data.thumb;
-
-                // 给文章内容content赋值
-                $('#container').html(data.data.content);
-
-            }
-        });
-        /*ajax GET请求 e*/
-
         // 监听submit提交
         form.on('submit(*)', function(data){
             //layer.msg(JSON.stringify(data.field));
 
-            // 判断文章缩略图是否已上传
+            // 判断新闻缩略图是否已上传
             if(!thumb) {
-                layer.msg('请上传文章缩略图', {icon: 7});
+                layer.msg('请上传新闻缩略图', {icon: 7});
                 return false;
             }
             data.field.thumb = thumb; // 对 thumb 字段赋值
-            data.field.content = $('#container').html(); // 对 content 字段赋值
             //console.log(data.field); // 对 thumb 字段赋值后，测试是否赋值成功
 
             /*ajax请求 s*/
             // TODO：在 /public/static/ 目录下新建 common.js 文件，封装公用 ajax 方法
             var _data = data.field;
-            var url = "{:url('admin/article/update', array('id' => $_GET['id']))}";
+            var url = "{:url('admin/news/save')}";
             ajaxRequest(url, 'post', _data);
             /*ajax请求 e*/
 
@@ -214,15 +142,16 @@
         var uploadInst = upload.render({
             elem: '#thumb' //绑定元素
             ,url: '{:url("admin/upload/uploadThumb")}' //上传接口
-            ,data: {name: "thumb", dir: "article"}
+            ,data: {name: "thumb", dir: "news"}
             ,field: 'thumb' // 设定文件域的字段名
             ,done: function(res){
                 //上传完毕回调
-                thumb = res.data; // 获取文章缩略图路径值
+                thumb = res.data; // 获取新闻缩略图路径值
+                //console.log(thumb);
                 if (thumb) {
-                    $('#thumb').hide();
+                    //$('#thumb').hide();
                     $('#thumb').next().remove('img');
-                    $('#thumb').after('<img src="/' + thumb + '" alt="" title="' + thumb + '" class="layui-upload-img" width="200">');
+                    $('#thumb').after(' <img src="/' + thumb + '" alt="" title="' + thumb + '" class="layui-upload-img" width="200">');
                 }
             }
             ,error: function(){

@@ -7,13 +7,14 @@ use think\Controller;
 use think\Request;
 
 /**
- * 后台文章类别控制器类
- * Class ArticleCate
+ * 后台新闻控制器类
+ * Class News
  * @package app\admin\controller
  */
-class ArticleCate extends Base
+class News extends Base
 {
-    private $cateType = []; // 文章类别分组
+    private $articleStatus = []; // 文章或新闻状态
+    private $newsCateType = []; // 新闻类别分组
 
     /**
      * 初始化
@@ -21,11 +22,12 @@ class ArticleCate extends Base
     public function _initialize()
     {
         parent::_initialize();
-        $this->cateType = config('code.cate_type');
+        $this->articleStatus = config('code.article_status');
+        $this->newsCateType = config('code.news_cate_type');
     }
 
     /**
-     * 显示文章类别资源列表
+     * 显示新闻资源列表
      * @return \think\response\Json
      */
     public function index()
@@ -37,10 +39,10 @@ class ArticleCate extends Base
     }
 
     /**
-     * 获取文章类别资源列表
+     * 获取新闻资源列表
      * @return \think\response\Json
      */
-    public function getArticleCate()
+    public function getNews()
     {
         // 判断为GET请求
         if (request()->isGet()) {
@@ -50,62 +52,40 @@ class ArticleCate extends Base
 
             // 查询条件
             $map = [];
-            if (!empty($param['cate_name'])) {
-                $map['cate_name|cate_alias'] = ['like', '%' . trim($param['cate_name']) . '%']; // 在多个字段之间用|分割表示OR查询，用&分割表示AND查询，如：Db::table('think_user')->where('name|title','like','thinkphp%')->where('create_time&update_time','>',0)->find();
+            if (!empty($param['article_title'])) {
+                $map['title'] = ['like', '%' . trim($param['article_title']) . '%'];
             }
-            if (!empty($param['parent_id'])) {
-                $map['parent_id'] = ['like', '%' . trim($param['parent_id']) . '%'];
+            if (isset($param['cate_name'])) {
+                // 获取新闻类别 cate_id
+                $newsCate = db('news_cate')->field('cate_id')->where('cate_name', 'like', '%' . trim($param['cate_name']) . '%')->select();
+                $cate_ids = [];
+                foreach ($newsCate as $key => $value) {
+                    $cate_ids[] = $value['cate_id'];
+                }
+                $map['cate_id'] = ['in', $cate_ids]; // [NOT] IN 查询
             }
 
             // 获取分页page、size
             $this->getPageAndSize($param);
 
-            // 获取文章类别列表树
-            $data = $this->_articleCateTree($map);
-            $count = model('ArticleCate')->count();
-
-            return show(config('code.success'), 'OK', $data = ['data' => $data, 'count' => $count]);
-        }
-    }
-
-    /**
-     * 获取处理数据后的文章类别列表树
-     * @param $map
-     * @return mixed
-     * @throws ApiException
-     */
-    public static function _articleCateTree($map = [])
-    {
-        // 获取文章类别列表树，用于页面下拉框列表
-        // 捕获异常
-        try {
-            $data = model('ArticleCate')->getArticleCateTree($map);
-        } catch (\Exception $e) {
-            throw new ApiException($e->getMessage(), 500, config('code.error'));
-        }
-
-        if ($data) {
-            // 处理数据
-            $cateType = config('code.cate_type'); // 文章类别分组
+            // 获取分页列表数据 模式一：基于paginate()自动化分页
+            $data = model('News')->getNews($map, $this->size);
             foreach ($data as $key => $value) {
-                // 定义文章类别分组名称
-                $data[$key]['cate_type_msg'] = $cateType[$value['cate_type']];
+                // 处理数据
+                // 新闻类别
+                $newsCate = db('news_cate')->field('cate_name')->where('cate_id', $value['cate_id'])->find();
+                $data[$key]['cate_name'] = $newsCate['cate_name'];
+                if ($value['cate_id'] == 0) {$data[$key]['cate_name'] = '其他';}
 
-                // 是否导航显示
-                $data[$key]['show_in_nav_msg'] = $value['show_in_nav'] == 1 ? '显示' : '不显示';
-
-                if ($value['level'] != 0) {
-                    // level 用于定义 title 前面的空位符的长度
-                    $data[$key]['cate_name'] = str_repeat('&nbsp;', $value['level'] * 5). '└─ ' . $value['cate_name']; // str_repeat(string,repeat) 函数把字符串重复指定的次数
-                }
+                // 定义status_msg
+                $data[$key]['status_msg'] = $this->articleStatus[$value['status']];
             }
+            return show(config('code.success'), 'OK', $data);
         }
-
-        return $data;
     }
 
     /**
-     * 显示创建文章类别资源表单页.
+     * 显示创建新闻资源表单页.
      *
      * @return \think\Response
      */
@@ -113,12 +93,19 @@ class ArticleCate extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['cateType' => $this->cateType, 'articleCateTree' => $this->_articleCateTree()]);
+            // 定义顶级类别分组说明
+            $cateTypeDescription = []; // 顶级类别分组说明
+            foreach ($this->newsCateType as $key => $value) {
+                $cateTypeDescription[] = $key . ' ' . $value;
+            }
+            $cateTypeDescription = implode('，', $cateTypeDescription);
+
+            return view('', ['newsCateTree' => NewsCate::_newsCateTree(), 'cateTypeDescription' => $cateTypeDescription]);
         }
     }
 
     /**
-     * 保存新建的文章类别资源
+     * 保存新建的新闻资源
      * @param Request $request
      * @return \think\response\Json
      * @throws ApiException
@@ -131,7 +118,7 @@ class ArticleCate extends Base
             $data = input('post.');
 
             // validate验证
-            /*$validate = validate('ArticleCate');
+            /*$validate = validate('News');
             if (!$validate->check($data)) {
                 return show(config('code.error'), $validate->getError(), [], 403);
             }*/
@@ -141,21 +128,21 @@ class ArticleCate extends Base
             // 新增
             // 捕获异常
             try {
-                $id = model('ArticleCate')->add($data, 'cate_id'); // 新增
+                $id = model('News')->add($data, 'article_id'); // 新增
             } catch (\Exception $e) {
                 throw new ApiException($e->getMessage(), 500, config('code.error'));
             }
             // 判断是否新增成功：获取id
             if ($id) {
-                return show(config('code.success'), '文章类别新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/article_cate/index'], 201);
+                return show(config('code.success'), '新闻新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/news/index'], 201);
             } else {
-                return show(config('code.error'), '文章类别新增失败', [], 403);
+                return show(config('code.error'), '新闻新增失败', [], 403);
             }
         }
     }
 
     /**
-     * 显示指定的文章类别资源
+     * 显示指定的新闻资源
      * @param int $id
      * @return \think\response\Json
      * @throws ApiException
@@ -165,12 +152,16 @@ class ArticleCate extends Base
         // 判断为GET请求
         if (request()->isGet()) {
             try {
-                $data = model('ArticleCate')->find($id);
+                $data = model('News')->find($id);
             } catch (\Exception $e) {
                 throw new ApiException($e->getMessage(), 500, config('code.error'));
             }
 
             if ($data) {
+                // 处理数据
+                // 定义status_msg
+                $data['status_msg'] = $this->articleStatus[$data['status']];
+
                 return show(config('code.success'), 'ok', $data);
             }
         }
@@ -186,12 +177,19 @@ class ArticleCate extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['cateType' => $this->cateType, 'articleCateTree' => $this->_articleCateTree()]);
+            // 定义顶级类别分组说明
+            $cateTypeDescription = []; // 顶级类别分组说明
+            foreach ($this->newsCateType as $key => $value) {
+                $cateTypeDescription[] = $key . ' ' . $value;
+            }
+            $cateTypeDescription = implode('，', $cateTypeDescription);
+
+            return view('', ['newsCateTree' => NewsCate::_newsCateTree(), 'cateTypeDescription' => $cateTypeDescription]);
         }
     }
 
     /**
-     * 保存更新的文章类别资源
+     * 保存更新的新闻资源
      * @param Request $request
      * @param int $id
      * @return \think\response\Json
@@ -203,36 +201,39 @@ class ArticleCate extends Base
         $param = input('param.');
 
         // validate验证
-        /*$validate = validate('ArticleCate');
+        /*$validate = validate('News');
         if (!$validate->check($param, [], '')) {
             return show(config('code.error'), $validate->getError(), [], 403);
         }*/
 
         // 判断数据是否存在
         $data = [];
-        if (!empty($param['cate_name'])) {
-            $data['cate_name'] = trim($param['cate_name']);
+        if (!empty($param['title'])) {
+            $data['title'] = trim($param['title']);
         }
-        if (!empty($param['cate_alias'])) {
-            $data['cate_alias'] = trim($param['cate_alias']);
+        if (!empty($param['author'])) {
+            $data['author'] = trim($param['author']);
         }
-        if (isset($param['cate_type'])) {
-            $data['cate_type'] = $param['cate_type'];
-        }
-        if (isset($param['parent_id'])) {
-            $data['parent_id'] = $param['parent_id'];
+        if (isset($param['cate_id'])) {
+            $data['cate_id'] = $param['cate_id'];
         }
         if (!empty($param['keywords'])) {
             $data['keywords'] = trim($param['keywords']);
         }
-        if (isset($param['show_in_nav'])) {
-            $data['show_in_nav'] = $param['show_in_nav'];
+        if (!empty($param['article_abstract'])) {
+            $data['article_abstract'] = trim($param['article_abstract']);
         }
-        if (!empty($param['cate_description'])) {
-            $data['cate_description'] = trim($param['cate_description']);
+        if (!empty($param['thumb'])) {
+            $data['thumb'] = trim($param['thumb']);
+
+            // 获取更新成功前的新闻缩略图thumb
+            $news = model('News')->field('thumb')->find($id);
         }
-        if (isset($param['sort'])) {
-            $data['sort'] = $param['sort'];
+        if (!empty($param['content'])) {
+            $data['content'] = $param['content'];
+        }
+        if (isset($param['status'])) { // 不能用 !empty() ，否则 status = 0 时也判断为空
+            $data['status'] = input('param.status', null, 'intval');
         }
 
         if (empty($data)) {
@@ -241,19 +242,31 @@ class ArticleCate extends Base
 
         // 更新
         try {
-            $result = model('ArticleCate')->save($data, ['cate_id' => $id]); // 更新
+            $result = model('News')->save($data, ['article_id' => $id]); // 更新
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
         }
         if (false === $result) {
             return show(config('code.error'), '更新失败', [], 403);
         } else {
+
+            // 当为更新状态时，直接刷新当前页面
+            if (array_key_exists('status', $param) && count($param) == 2) { // 传入2个参数，其中一个是 status
+                return $this->redirect('news/index');
+            }
+
+            // 删除更新成功前的新闻缩略图thumb文件
+            if (!empty($param['thumb'] && trim($param['thumb']) != $news['thumb'])) {
+                // 删除文件
+                unlink(ROOT_PATH . 'public' . DS . $news['thumb']);
+            }
+
             return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
         }
     }
 
     /**
-     * 删除指定文章类别资源
+     * 删除指定新闻资源
      * @param int $id
      * @return \think\response\Json
      * @throws ApiException
@@ -262,20 +275,20 @@ class ArticleCate extends Base
     {
         // 显示指定的店鋪比赛场次模板
         try {
-            $data = model('ArticleCate')->find($id);
+            $data = model('News')->find($id);
             //return show(config('code.success'), 'ok', $data);
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
         }
 
         // 判断数据是否存在
-        if ($data['cate_id'] != $id) {
+        if ($data['article_id'] != $id) {
             return show(config('code.error'), '数据不存在');
         }
 
         // 真删除
         if ($data['status'] == config('code.status_disable') && empty($data['rules'])) {
-            $result = model('ArticleCate')->destroy($id);
+            $result = model('News')->destroy($id);
             if (!$result) {
                 return show(config('code.error'), '删除失败');
             } else {

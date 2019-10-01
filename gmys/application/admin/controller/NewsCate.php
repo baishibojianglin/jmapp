@@ -7,13 +7,13 @@ use think\Controller;
 use think\Request;
 
 /**
- * 后台文章类别控制器类
- * Class ArticleCate
+ * 后台新闻类别控制器类
+ * Class NewsCate
  * @package app\admin\controller
  */
-class ArticleCate extends Base
+class NewsCate extends Base
 {
-    private $cateType = []; // 文章类别分组
+    private $newsCateType = []; // 新闻类别分组
 
     /**
      * 初始化
@@ -21,11 +21,11 @@ class ArticleCate extends Base
     public function _initialize()
     {
         parent::_initialize();
-        $this->cateType = config('code.cate_type');
+        $this->newsCateType = config('code.news_cate_type');
     }
 
     /**
-     * 显示文章类别资源列表
+     * 显示新闻类别资源列表
      * @return \think\response\Json
      */
     public function index()
@@ -37,10 +37,10 @@ class ArticleCate extends Base
     }
 
     /**
-     * 获取文章类别资源列表
+     * 获取新闻类别资源列表
      * @return \think\response\Json
      */
-    public function getArticleCate()
+    public function getNewsCate()
     {
         // 判断为GET请求
         if (request()->isGet()) {
@@ -60,35 +60,35 @@ class ArticleCate extends Base
             // 获取分页page、size
             $this->getPageAndSize($param);
 
-            // 获取文章类别列表树
-            $data = $this->_articleCateTree($map);
-            $count = model('ArticleCate')->count();
+            // 获取新闻类别列表树
+            $data = $this->_newsCateTree($map);
+            $count = model('NewsCate')->count();
 
             return show(config('code.success'), 'OK', $data = ['data' => $data, 'count' => $count]);
         }
     }
 
     /**
-     * 获取处理数据后的文章类别列表树
+     * 获取处理数据后的新闻类别列表树
      * @param $map
      * @return mixed
      * @throws ApiException
      */
-    public static function _articleCateTree($map = [])
+    public static function _newsCateTree($map = [])
     {
-        // 获取文章类别列表树，用于页面下拉框列表
+        // 获取新闻类别列表树，用于页面下拉框列表
         // 捕获异常
         try {
-            $data = model('ArticleCate')->getArticleCateTree($map);
+            $data = model('NewsCate')->getNewsCateTree($map);
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
         }
 
         if ($data) {
             // 处理数据
-            $cateType = config('code.cate_type'); // 文章类别分组
+            $cateType = config('code.news_cate_type'); // 新闻类别分组
             foreach ($data as $key => $value) {
-                // 定义文章类别分组名称
+                // 定义新闻类别分组名称
                 $data[$key]['cate_type_msg'] = $cateType[$value['cate_type']];
 
                 // 是否导航显示
@@ -105,7 +105,7 @@ class ArticleCate extends Base
     }
 
     /**
-     * 显示创建文章类别资源表单页.
+     * 显示创建新闻类别资源表单页.
      *
      * @return \think\Response
      */
@@ -113,12 +113,12 @@ class ArticleCate extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['cateType' => $this->cateType, 'articleCateTree' => $this->_articleCateTree()]);
+            return view('', ['newsCateType' => $this->newsCateType, 'newsCateTree' => $this->_newsCateTree()]);
         }
     }
 
     /**
-     * 保存新建的文章类别资源
+     * 保存新建的新闻类别资源
      * @param Request $request
      * @return \think\response\Json
      * @throws ApiException
@@ -131,7 +131,7 @@ class ArticleCate extends Base
             $data = input('post.');
 
             // validate验证
-            /*$validate = validate('ArticleCate');
+            /*$validate = validate('NewsCate');
             if (!$validate->check($data)) {
                 return show(config('code.error'), $validate->getError(), [], 403);
             }*/
@@ -141,21 +141,21 @@ class ArticleCate extends Base
             // 新增
             // 捕获异常
             try {
-                $id = model('ArticleCate')->add($data, 'cate_id'); // 新增
+                $id = model('NewsCate')->add($data, 'cate_id'); // 新增
             } catch (\Exception $e) {
                 throw new ApiException($e->getMessage(), 500, config('code.error'));
             }
             // 判断是否新增成功：获取id
             if ($id) {
-                return show(config('code.success'), '文章类别新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/article_cate/index'], 201);
+                return show(config('code.success'), '新闻类别新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/news_cate/index'], 201);
             } else {
-                return show(config('code.error'), '文章类别新增失败', [], 403);
+                return show(config('code.error'), '新闻类别新增失败', [], 403);
             }
         }
     }
 
     /**
-     * 显示指定的文章类别资源
+     * 显示指定的新闻类别资源
      * @param int $id
      * @return \think\response\Json
      * @throws ApiException
@@ -165,7 +165,7 @@ class ArticleCate extends Base
         // 判断为GET请求
         if (request()->isGet()) {
             try {
-                $data = model('ArticleCate')->find($id);
+                $data = model('NewsCate')->find($id);
             } catch (\Exception $e) {
                 throw new ApiException($e->getMessage(), 500, config('code.error'));
             }
@@ -186,12 +186,12 @@ class ArticleCate extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
-            return view('', ['cateType' => $this->cateType, 'articleCateTree' => $this->_articleCateTree()]);
+            return view('', ['newsCateType' => $this->newsCateType, 'newsCateTree' => $this->_newsCateTree()]);
         }
     }
 
     /**
-     * 保存更新的文章类别资源
+     * 保存更新的新闻类别资源
      * @param Request $request
      * @param int $id
      * @return \think\response\Json
@@ -203,7 +203,7 @@ class ArticleCate extends Base
         $param = input('param.');
 
         // validate验证
-        /*$validate = validate('ArticleCate');
+        /*$validate = validate('NewsCate');
         if (!$validate->check($param, [], '')) {
             return show(config('code.error'), $validate->getError(), [], 403);
         }*/
@@ -241,7 +241,7 @@ class ArticleCate extends Base
 
         // 更新
         try {
-            $result = model('ArticleCate')->save($data, ['cate_id' => $id]); // 更新
+            $result = model('NewsCate')->save($data, ['cate_id' => $id]); // 更新
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
         }
@@ -253,7 +253,7 @@ class ArticleCate extends Base
     }
 
     /**
-     * 删除指定文章类别资源
+     * 删除指定新闻类别资源
      * @param int $id
      * @return \think\response\Json
      * @throws ApiException
@@ -262,7 +262,7 @@ class ArticleCate extends Base
     {
         // 显示指定的店鋪比赛场次模板
         try {
-            $data = model('ArticleCate')->find($id);
+            $data = model('NewsCate')->find($id);
             //return show(config('code.success'), 'ok', $data);
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), 500, config('code.error'));
@@ -275,7 +275,7 @@ class ArticleCate extends Base
 
         // 真删除
         if ($data['status'] == config('code.status_disable') && empty($data['rules'])) {
-            $result = model('ArticleCate')->destroy($id);
+            $result = model('NewsCate')->destroy($id);
             if (!$result) {
                 return show(config('code.error'), '删除失败');
             } else {

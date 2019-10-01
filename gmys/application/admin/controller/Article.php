@@ -13,7 +13,18 @@ use think\Request;
  */
 class Article extends Base
 {
-    private $status = [0 => '草稿', 1 => '通过', 2 => '待审核', 3 => '驳回', 4 => '发布', 5 => '下架']; // 文章状态：0草稿，1通过，2待审核，3驳回，4发布，5下架 //config('code.status')
+    private $articleStatus = []; // 文章或新闻状态
+    private $cateType = []; // 文章类别分组
+
+    /**
+     * 初始化
+     */
+    public function _initialize()
+    {
+        parent::_initialize();
+        $this->articleStatus = config('code.article_status');
+        $this->cateType = config('code.cate_type');
+    }
 
     /**
      * 显示文章资源列表
@@ -62,12 +73,15 @@ class Article extends Base
             foreach ($data as $key => $value) {
                 // 处理数据
                 // 文章类别
-                $articleCate = db('article_cate')->field('cate_name')->where('cate_id', $value['cate_id'])->find();
+                $articleCate = db('article_cate')->field('cate_name, cate_type')->where('cate_id', $value['cate_id'])->find();
                 $data[$key]['cate_name'] = $articleCate['cate_name'];
                 if ($value['cate_id'] == 0) {$data[$key]['cate_name'] = '其他';}
 
+                // 定义文章类别分组名称
+                $data[$key]['cate_type_msg'] = $this->cateType[$articleCate['cate_type']];
+
                 // 定义status_msg
-                $data[$key]['status_msg'] = $this->status[$value['status']];
+                $data[$key]['status_msg'] = $this->articleStatus[$value['status']];
             }
             return show(config('code.success'), 'OK', $data);
         }
@@ -82,8 +96,17 @@ class Article extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
+            // 定义顶级类别分组说明
+            $cateTypeDescription = []; // 顶级类别分组说明
+            foreach ($this->cateType as $key => $value) {
+                $cateTypeDescription[] = $key . ' ' . $value;
+            }
+            $cateTypeDescription = implode('，', $cateTypeDescription);
+
+            // 获取设计师
             $member = model('Member')->field('member_id, member_name')->select();
-            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'member' => $member]);
+
+            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'cateTypeDescription' => $cateTypeDescription, 'member' => $member]);
         }
     }
 
@@ -143,7 +166,7 @@ class Article extends Base
             if ($data) {
                 // 处理数据
                 // 定义status_msg
-                $data['status_msg'] = $this->status[$data['status']];
+                $data['status_msg'] = $this->articleStatus[$data['status']];
 
                 return show(config('code.success'), 'ok', $data);
             }
@@ -160,8 +183,17 @@ class Article extends Base
     {
         // 判断为GET请求
         if (request()->isGet()) {
+            // 定义顶级类别分组说明
+            $cateTypeDescription = []; // 顶级类别分组说明
+            foreach ($this->cateType as $key => $value) {
+                $cateTypeDescription[] = $key . ' ' . $value;
+            }
+            $cateTypeDescription = implode('，', $cateTypeDescription);
+
+            // 获取设计师
             $member = model('Member')->field('member_id, member_name')->select();
-            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'member' => $member]);
+
+            return view('', ['articleCateTree' => ArticleCate::_articleCateTree(), 'cateTypeDescription' => $cateTypeDescription, 'member' => $member]);
         }
     }
 

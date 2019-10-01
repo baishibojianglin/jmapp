@@ -6,30 +6,30 @@
         <div class="pagewrap">
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
-                <a href="">文章</a>
-                <a><cite>文章列表</cite></a>
+                <a href="">新闻动态</a>
+                <a><cite>新闻分类</cite></a>
             </span>
         </div>
     </div>
     <div class="layui-row">
         <div class="layui-card">
-            <div class="layui-card-header">文章列表</div>
+            <div class="layui-card-header">新闻分类列表</div>
             <div class="layui-card-body">
                 <script type="text/html" id="toolbar">
                     <div class="form-box">
                         <div class="layui-form layui-form-item">
                             <div class="layui-inline">
-                                <button class="layui-btn layui-btn-blue"  onclick="location.href='{:url("admin/article/create")}'" ><i class="layui-icon">&#xe654;</i>新增</button>
+                                <button class="layui-btn layui-btn-blue"  onclick="location.href='{:url("admin/news_cate/create")}'" ><i class="layui-icon">&#xe654;</i>新增</button>
                             </div>
                             <div class="layui-inline">
-                                <div class="layui-form-mid">标题</div>
-                                <div class="layui-input-inline" style="width: 100px;">
-                                    <input type="text" name="article_title" value="" autocomplete="off" class="layui-input">
-                                </div>
-                                <div class="layui-form-mid">类别</div>
+                                <div class="layui-form-mid">顶级分类</div>
                                 <div class="layui-input-inline" style="width: 100px;">
                                     <input type="text" name="cate_name" value="" autocomplete="off" class="layui-input">
                                 </div>
+                                <!--<div class="layui-form-mid">上级</div>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="text" name="parent_id" value="" autocomplete="off" class="layui-input">
+                                </div>-->
                                 <button class="layui-btn layui-btn-blue" onclick="layuiTable()">查询</button>
                                 <!--<button class="layui-btn layui-btn-primary">重置</button>-->
                             </div>
@@ -42,9 +42,10 @@
     </div>
 </div>
 
-{include file="public/_footer" /}
 <!--<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-<script src="__STATIC__/layui/layui.all.js"></script>-->
+<script src="__STATIC__/layui/layui.all.js"></script>
+<script src="__STATIC__/common/js/common.js"></script>-->
+{include file="public/_footer" /}
 <script>
 
     // 页面加载时执行
@@ -62,29 +63,24 @@
             table.render({
                 elem: '#layui_table'
                 , cols: [[ //表头
-                    {field: 'article_id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                    , {field: 'title', title: '标题', cellMinWidth: 120}
-                    , {field: 'thumb', title: '缩略图', width: 120, templet: '<div><img src="/{{d.thumb}}" alt="{{d.thumb}}" title="{{d.thumb}}" width="200"></div>'}
-                    , {field: 'cate_name', title: '类别', width: 120}
-                    , {field: 'cate_type_msg', title: '类别分组', width: 150}
-                    , {field: 'status_msg', title: '状态', width: 60}
-                    , {field: 'create_time', title: '创建时间', width: 120}
-                    , {field: 'update_time', title: '更新时间', width: 120}
-                    , {title: '操作', fixed: 'right', width: 180, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+                    {field: 'cate_id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                    , {field: 'cate_name', title: '分类名称', cellMinWidth: 120}
+                    , {field: 'cate_alias', title: '分类别名', cellMinWidth: 120}
+                    , {field: 'parent_id', title: '上级ID', width: 80}
+                    //, {field: 'cate_type_msg', title: '分组', width: 150}
+                    , {field: 'show_in_nav_msg', title: '是否导航显示', width: 120, templet: '#statusTpl'}
+                    , {field: 'sort', title: '排序', width: 120, templet: '#sortTpl'}
+                    , {title: '操作', fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
                 ]]
-                , url: '{:url("admin/article/getArticle")}' //数据接口
+                , url: '{:url("admin/news_cate/getNewsCate")}' //数据接口
                 //,method: 'get' // 接口http请求类型，默认：get
-                ,where: {article_title: $('input[name="article_title"]').val(), cate_name: $('input[name="cate_name"]').val()} // 接口的其它参数，此处为搜索条件
+                ,where: {cate_name: $('input[name="cate_name"]').val(), parent_id: $('input[name="parent_id"]').val()} // 接口的其它参数，此处为搜索条件
                 //,contentType: 'application/x-www-form-urlencoded'
                 , parseData: function (res) { //res 即为原始返回的数据
-                    /*console.log(res);
-                    console.log('limit ' + this.limit); // 每页数据量
-                    console.log('curr ' + res.data.current_page); // 当前页码*/
-                    //var result = res.data.data.slice(this.limit*(res.data.current_page-1),this.limit*res.data.current_page);
                     return {
                         "code": res.status, //解析接口状态
                         "msg": res.message, //解析提示文本
-                        "count": res.data.total, //解析数据长度
+                        //"count": res.data.count, //解析数据长度
                         "data": res.data.data //解析数据列表
                     };
                 }
@@ -102,10 +98,7 @@
                 //, id: 'layui_table'
                 , toolbar: '#toolbar' //'<div>权限规则列表</div>'
                 //,height: 312 // 设定容器高度
-                ,page: true //开启分页
-                /*,page: {
-                    limit: 5
-                }*/
+                //,page: true //开启分页
             });
 
             // 监听工具条
@@ -130,7 +123,7 @@
                         title: '编辑',
                         //skin: 'layui-layer-rim', //加上边框
                         area: ['90%', '90%'], //宽高
-                        content: '{:url("admin/article/edit")}?id=' + data.article_id,
+                        content: '{:url("admin/news_cate/edit")}?id=' + data.cate_id,
                         maxmin: true
                     });
 
@@ -142,50 +135,28 @@
                 } else if(layEvent === 'LAYTABLE_TIPS'){
                     layer.alert('Hi，头部工具栏扩展的右侧图标。');
                 } else if(layEvent === 'updateStatus'){ // 更新状态
+                    //console.log('ID', data.cate_id);
+                    //console.log('status 1', data.show_in_nav);
 
-                    // 1.文章状态：0草稿，1通过，2待审核，3驳回，4发布，5下架
-                    var html = '<form action="{:url("admin/article/update")}?id=' + data.article_id + '" method="post" class="layui-form" lay-filter="layui_form" style="position: relative;top: 2rem;">' +
-                                //'<input type="hidden" name="article_id" value="' + data.article_id + '" />' +
-                                '<div class="layui-form-item">' +
-                                    '<label class="layui-form-label">文章状态</label>' +
-                                    '<div class="layui-input-block">' +
-                                        '<select name="status" id="status' + data.article_id + '" lay-verify="required" lay-ignore>' +
-                                            '<option value="">请选择…</option>' +
-                                            '<option value="0">草稿</option>' +
-                                            '<option value="1">通过</option>' +
-                                            '<option value="2">待审核</option>' +
-                                            '<option value="3">驳回</option>' +
-                                            '<option value="4">发布</option>' +
-                                            '<option value="5">下架</option>' +
-                                        '</select>' +
-                                    '</div>' +
-                                '</div>' +
-                                '<div class="layui-form-item">' +
-                                    '<div class="layui-input-block">' +
-                                        '<button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</form>';
+                    // 重新给 是否导航显示show_in_nav 赋值
+                    data.show_in_nav = data.show_in_nav == 1 ? 0 : 1;
 
-                    // 2.页面层
-                    layer.open({
-                        type: 1,
-                        title: '更新状态',
-                        //skin: 'layui-layer-rim', //加上边框
-                        area: ['420px', '240px'], //宽高
-                        content: html, // html内容
-                        maxmin: true
+                    //同步更新缓存对应的值
+                    obj.update({
+                        show_in_nav: data.show_in_nav // 是否导航显示
                     });
 
-                    // 3.option 添加“选中”属性（需放在页面弹出层 layer.open() 后面）
-                    //var arr = [];
-                    $('#status'+ data.article_id +' option').each(function () {
-                        //arr.push(this.value)
-                        if (this.value == data.status) {
-                            this.selected = 'selected';
-                        }
-                    });
+                    // 更新DOM节点属性
+                    if (0 == data.show_in_nav) {
+                        //console.log('status 20', data.show_in_nav);
+                        $('input[name="status"][id="status' + data.cate_id + '"]').attr({'value': 0, 'checked': false});
+                    } else {
+                        //console.log('status 21', data.show_in_nav);
+                        $('input[name="status"][id="status' + data.cate_id + '"]').attr({'value': 1, 'checked': true});
+                    }
 
+                    // 向服务端发送更新指令：ajax请求
+                    changeTableVal('news_cate', 'cate_id', data.cate_id, 'show_in_nav', data.show_in_nav, this);
                 }
             });
 
@@ -203,11 +174,11 @@
 
         });
     }
+
 </script>
 
 <!--toolbar - 绑定工具条模板，它可以存放在页面的任意位置 s-->
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="updateStatus" title="更新文章审核状态">审核</a>
     <!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>--><!--注意：属性 lay-event="" 是模板的关键所在，值可随意定义。-->
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -218,6 +189,26 @@
     {{#  } }}
 </script>
 <!--toolbar - 绑定工具条模板 e-->
+
+<!--templet - 自定义列模板 s-->
+<!--状态 s-->
+<script type="text/html" id="statusTpl">
+    <a lay-event="updateStatus">
+        {{#  if (1 == d.show_in_nav) { }}
+        <input type="checkbox" name="status" checked value="{{d.show_in_nav}}" id="status{{d.cate_id}}" lay-skin="switch" lay-text="显示|不显示">
+        {{#  } else { }}
+        <input type="checkbox" name="status" value="{{d.show_in_nav}}" id="status{{d.cate_id}}" lay-skin="switch" lay-text="显示|不显示">
+        {{#  } }}
+    </a>
+</script>
+<!--状态 e-->
+
+<!--排序 s-->
+<script type="text/html" id="sortTpl">
+    <input type="number" min="0" step="1" name="sort" value="{{d.sort}}" class="layui-input" style="height: 100%;" oninput="changeTableVal('news_cate', 'cate_id', '{{d.cate_id}}', 'sort', this.value, this)">
+</script>
+<!--排序 e-->
+<!--templet - 自定义列模板 e-->
 
 </body>
 </html>

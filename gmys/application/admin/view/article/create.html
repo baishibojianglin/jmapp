@@ -32,16 +32,17 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">类别</label>
+                        <label class="layui-form-label">类别/分组</label>
                         <div class="layui-input-block">
                             <select name="cate_id" lay-filter="cate_id" lay-verify="required">
                                 <option value="">请选择…</option>
                                 {volist name="articleCateTree" id="vo"}
-                                <option value="{$vo.cate_id}">{$vo.cate_name}<br/></option>
+                                <option value="{$vo.cate_id}">{$vo.cate_name}{if condition="$vo.parent_id == 0"}/{$vo.cate_type}{/if}</option>
                                 {/volist}
                                 <option value="0">其他</option>
                             </select>
                         </div>
+                        <div class="layui-input-block layui-form-mid layui-word-aux">顶级类别分组：{$cateTypeDescription}</div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">关键字</label>
@@ -86,7 +87,7 @@
                             <select name="designer_id" lay-filter="designer_id" lay-verify="required">
                                 <option value="">请选择…</option>
                                 {volist name="member" id="vo"}
-                                <option value="{$vo.member_id}">{$vo.member_name}<br/></option>
+                                <option value="{$vo.member_id}">{$vo.member_name}</option>
                                 {/volist}
                                 <option value="0">其他</option>
                             </select>
