@@ -7,6 +7,7 @@ use think\Request;
 
 class Index extends Controller
 {   
+
 	 //装饰风格文章列表
     public function index(){
 

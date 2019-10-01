@@ -38,9 +38,10 @@
 			    //默认加载文章列表
 			     var self=this;
 				 uni.request({
-					url:'/api/index/Index/index',
+					url:this.$url+'index.php/index/Index/index',
 					method:'GET',
 					success:function(res){
+						console.log(res);
 						if(res.data.length!=0){
 						    self.article_list=res.data;
 						}else{

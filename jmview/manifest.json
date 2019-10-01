@@ -84,9 +84,14 @@
                         "^/api" : ""
                     }
                 }
-            }
+            },
+            "https" : false
         },
         "title" : "几米艺墅",
-        "domain" : "http://jm.dilinsat.com/"
+        "domain" : "http://www.h5.com",
+        "router" : {
+            "mode" : "history",
+            "base" : ""
+        }
     }
 }
