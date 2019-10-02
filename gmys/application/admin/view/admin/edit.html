@@ -2,7 +2,7 @@
 </head>
 <body class="layui-view-body">
 <div class="layui-content">
-    <div class="layui-page-header layui-hide" >
+    <div class="layui-page-header" >
         <div class="pagewrap">
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
@@ -107,6 +107,7 @@
 
             /*ajax请求 s*/
             // TODO：在 /public/static/ 目录下新建 common.js 文件，封装公用 ajax 方法
+            data.field.old_group_id = "{$_GET['group_id']}"; // 声明还未更新的用户组ID
             var _data = data.field;
             var url = "{:url('admin/admin/update', array('id' => $_GET['id']))}";
             ajaxRequest(url, 'put', _data);

@@ -159,7 +159,7 @@
 <script type="text/html" id="barDemo">
     <!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>--><!--注意：属性 lay-event="" 是模板的关键所在，值可随意定义。-->
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  if(d.status == 0){ }}<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>{{#  } }}
 
     <!-- 这里同样支持 laytpl 语法，如： -->
     {{#  if(d.auth > 2){ }}
