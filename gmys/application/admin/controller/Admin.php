@@ -206,7 +206,16 @@ class Admin extends Base
             if (!empty($param['password'])) {
                 $data['password'] = IAuth::encrypt($param['password']);
             }
+            if (isset($param['group_id'])) {
+                if ($param['group_id'] != $param['old_group_id'] && $id == $this->session_admin['admin_id']) {
+                    return show(config('code.error'), '管理员已登录，禁止更新用户组', [], 400);
+                }
+                $data['status'] = input('param.status', null, 'intval');
+            }
             if (isset($param['status'])) { // 不能用 !empty() ，否则 status = 0 时也判断为空
+                if ($param['status'] != $this->session_admin['status'] && $id == $this->session_admin['admin_id']) {
+                    return show(config('code.error'), '管理员已登录，禁止更新状态', [], 400);
+                }
                 $data['status'] = input('param.status', null, 'intval');
             }
 
