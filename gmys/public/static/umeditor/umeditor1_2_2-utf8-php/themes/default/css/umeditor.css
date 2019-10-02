@@ -496,7 +496,7 @@
 .edui-modal {
     position: fixed;
     _position: absolute;
-    top: 10%;
+    top: 5%; /*10%*/
     left: 50%;
     border: 1px solid #acacac;
     box-shadow: 2px 2px 5px #d3d6da;

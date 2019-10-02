@@ -437,7 +437,7 @@
             'cancel': {}
         },
         width: 700,
-        height: 408
+        height: 278 //原来为408
     }, function (editor, $w, url, state) {
         Base.callback(editor, $w, url, state)
     })
