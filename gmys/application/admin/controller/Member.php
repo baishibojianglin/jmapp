@@ -215,7 +215,7 @@ class Member extends Base
             return show(config('code.error'), '更新失败', [], 403);
         } else {
             // 删除更新成功前的团队成员头像avatar文件
-            if (!empty($param['avatar'] && trim($param['avatar']) != $member['avatar'])) {
+            if (!empty($param['avatar']) && trim($param['avatar']) != $member['avatar']) {
                 // 删除文件
                 unlink(ROOT_PATH . 'public' . DS . $member['avatar']);
             }

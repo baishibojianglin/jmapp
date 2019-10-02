@@ -256,7 +256,7 @@ class News extends Base
             }
 
             // 删除更新成功前的新闻缩略图thumb文件
-            if (!empty($param['thumb'] && trim($param['thumb']) != $news['thumb'])) {
+            if (!empty($param['thumb']) && trim($param['thumb']) != $news['thumb']) {
                 // 删除文件
                 unlink(ROOT_PATH . 'public' . DS . $news['thumb']);
             }
