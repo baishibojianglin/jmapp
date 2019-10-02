@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "设计团队",
-  "navigationBarBackgroundColor": "#F8F8F8",
-  "usingComponents": {
-    "vrow": "/components/lml-layout/row",
-    "vcol": "/components/lml-layout/col"
-  }
-}
