@@ -1,0 +1,74 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*----------------每个页面公共css---设置样式-------------------*/
+
+/*富文本设置*/
+uni-rich-text ._img{
+	width: 100% !important;
+}
+uni-rich-text ._span{
+	display: inline-block;
+	padding:5rpx 10rpx;
+}
+
+/*-----------------每个页面公共css---基础样式-------------------*/
+
+/*边距*/
+.mp0{
+	margin: 0;
+	padding: 0;
+}
+.mr5{
+	margin-right: 5rpx;
+}
+
+/*字体*/
+.fw{
+	font-weight: 900;
+}
+.font25{
+	font-size: 25rpx;
+}
+.font28{
+	font-size: 28rpx;
+}
+.font32{
+	font-size: 32rpx;
+}
+
+/*浮动*/
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+
+/*颜色*/
+.red{
+	color:#DD2021;
+}
+
+/*行高*/
+.lh5{
+	line-height: 50rpx;
+}
+
+/*盒型*/
+.box{
+}
+
+
