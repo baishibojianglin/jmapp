@@ -32,7 +32,7 @@ class SystemConfig extends Base
             $siteInfo = model('Config')->where('type', 'site_info')->cache(true, 10)->select();
 
             // 二维数组转一维数组 ['name' => 'value']，即以数据表 `name`字段 的值为键名，以 `value`字段 的值为值
-            $data = array_column($siteInfo, 'value', 'name'); // array_column(array,column_key,index_key) 返回输入数组中某个单一列的值。
+            $data = i_array_column($siteInfo, 'value', 'name'); // array_column(array,column_key,index_key) 返回输入数组中某个单一列的值。
 
             return show(config('code.success'), 'OK', $data);
         }
@@ -48,7 +48,7 @@ class SystemConfig extends Base
         if (request()->isPut()) {
             // 获取更新前的网站信息
             $siteInfo = model('Config')->where('type', 'site_info')->select();
-            $data = array_column($siteInfo, 'value', 'name');
+            $data = i_array_column($siteInfo, 'value', 'name');
             // 获取更新成功前的网站logo
             $siteInfoData = model('Config')->field('value')->where(['name' => 'site_logo'])->find();
 
