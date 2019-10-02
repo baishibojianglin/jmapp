@@ -77,7 +77,7 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
-                    "target" : "http://jm.dilinsat.com/index.php",
+                    "target" : "http://admin.jm.dilinsat.com/",
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {
