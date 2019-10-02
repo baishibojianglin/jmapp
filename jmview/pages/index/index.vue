@@ -41,9 +41,12 @@
 					url:this.$url+'index.php/index/Index/index',
 					method:'GET',
 					success:function(res){
-						console.log(res);
 						if(res.data.length!=0){
 						    self.article_list=res.data;
+							let article_long=self.article_list.length;
+							for(let i=0;i<article_long;i++){
+								self.article_list[i].thumb=self.$url+res.data[i].thumb.replace(/\\/g, "/");
+							}
 						}else{
 							self.liststatus=true;
 						}

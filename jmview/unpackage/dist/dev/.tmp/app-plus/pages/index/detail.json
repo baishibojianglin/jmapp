@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "风格详情",
+  "navigationBarBackgroundColor": "#F8F8F8",
+  "usingComponents": {
+    "vrow": "/components/lml-layout/row",
+    "vcol": "/components/lml-layout/col",
+    "u-parse": "/components/gaoyia-parse/parse"
+  }
+}

@@ -1,4 +1,5 @@
 <script>
+	
 	export default {
 		onLaunch: function() {
 			
@@ -14,7 +15,7 @@
 
 <style>
 	/*----------------每个页面公共css---设置样式-------------------*/
-	
+	@import url("/components/gaoyia-parse/parse.css");
 	/*富文本设置*/
 	uni-rich-text img{
 		width: 100% !important;
@@ -23,6 +24,7 @@
 		display: inline-block;
 		padding:5upx 10upx;
 	}
+	
 	
 	/*-----------------每个页面公共css---基础样式-------------------*/
 	
