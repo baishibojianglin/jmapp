@@ -68,5 +68,11 @@
 .colright{
 	border-right: 1px solid #E3E0D5;
 }
+<<<<<<< HEAD
+=======
+.contentcss{
+	padding: 0rpx 10rpx;
+}
+>>>>>>> jm_notebook
 
 

@@ -2,7 +2,7 @@
 	<view class="content">
 		<vrow v-for="item in content">
 		    <vcol span="35" class="content">
-				   <image class="img" :src="$url+item.avatar.replace(/\\/g, '/')"></image>
+				   <image class="img" :src="item.avatar"></image>
 		    </vcol>	
 		    <vcol class="font28 lh5" span="65">
 				<vrow>
@@ -33,9 +33,13 @@
 	        //加载文章详情内容
 	         var self=this;
 	         uni.request({
-	        	url:'/api/index/Index/designer',
+	        	url:this.$url+'index.php/index/Index/designer',
 	        	method:'GET',
 	        	success:function(res){
+					let data_long=res.data.length;
+					for(let i=0;i<data_long;i++){
+						res.data[i].avatar=self.$url+res.data[i].avatar.replace(/\\/g, "/");
+					}				
 	        		self.content=res.data;
 	        	}
 	         }) 

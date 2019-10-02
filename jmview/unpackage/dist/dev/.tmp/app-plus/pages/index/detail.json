@@ -3,6 +3,11 @@
   "navigationBarBackgroundColor": "#F8F8F8",
   "usingComponents": {
     "vrow": "/components/lml-layout/row",
+<<<<<<< HEAD
     "vcol": "/components/lml-layout/col"
+=======
+    "vcol": "/components/lml-layout/col",
+    "u-parse": "/components/gaoyia-parse/parse"
+>>>>>>> jm_notebook
   }
 }
