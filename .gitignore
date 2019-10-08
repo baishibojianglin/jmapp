@@ -1,5 +1,6 @@
-*
-!/gmys
-!/jmview
-/jmview/unpackage
-!.gitignore
+
+#/gmys
+#/jmview
+jmview/unpackage
+.gitignore
+h5
