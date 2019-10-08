@@ -121,7 +121,7 @@ class Admin extends Base
                     db('auth_group_access')->insert($authGroupAccessData);
                 }
 
-                return show(config('code.success'), 'admin_id = ' . $id . '的管理员新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/admin/index']); //$this->success('admin_id = ' . $id . '的管理员新增成功');
+                return show(config('code.success'), 'admin_id = ' . $id . '的管理员新增成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/admin/index']); //$this->success('admin_id = ' . $id . '的管理员新增成功');
             } else {
                 return show(config('code.error'), '管理员新增失败', [], 403); //$this->error('err');
             }
@@ -327,7 +327,7 @@ class Admin extends Base
                     // 删除管理员的Auth用户组
                     db('auth_group_access')->where(['uid' => $id])->delete();
 
-                    return show(config('code.success'), '软删除成功', ['url' => 'delete']); //['url' => config('app.SERVER_NAME') . $this->module . '/admin/index']
+                    return show(config('code.success'), '软删除成功', ['url' => 'delete']); //['url' => config('app.I_SERVER_NAME') . $this->module . '/admin/index']
                 }
             }
 
