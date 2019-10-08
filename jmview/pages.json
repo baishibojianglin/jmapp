@@ -1,13 +1,6 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "现代风格",
-				"navigationBarBackgroundColor": "#F8F8F8"
-			}
-		},
-		{
 			"path": "pages/index/designer",
 			"style": {
 				"navigationBarTitleText": "设计团队",
@@ -15,9 +8,23 @@
 			}
 		},
 		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "现代风格",
+				"navigationBarBackgroundColor": "#F8F8F8"
+			}
+		},
+		{
 			"path": "pages/index/detail",
 			"style": {
 				"navigationBarTitleText": "风格详情",
+				"navigationBarBackgroundColor": "#F8F8F8"
+			}
+		},
+		{
+			"path": "pages/index/designerdetail",
+			"style": {
+				"navigationBarTitleText": "设计师风采",
 				"navigationBarBackgroundColor": "#F8F8F8"
 			}
 		}

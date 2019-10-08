@@ -36,6 +36,9 @@
 	.mr5{
 		margin-right: 5upx;
 	}
+	.mt10{
+		margin-top: 10upx;
+	}
 	
 	/*字体*/
 	.fw{
@@ -63,15 +66,14 @@
 	.red{
 		color:#DD2021;
 	}
+	.white{
+		color:#ffffff;
+	}
 	
 	/*行高*/
 	.lh5{
 		line-height: 50upx;
 	}
-	
-	/*盒型*/
-	.box{
-		
-	}
+
 	
 </style>

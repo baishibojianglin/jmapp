@@ -7,16 +7,16 @@
 			   </vrow>
 			   <vrow class="designname">设计师：{{content.member_name}}</vrow>
 		    </vcol>	
-		    <vcol span="70" class="center fon25 colheight">
+		    <vcol span="68" class="center fon25 colheight">
                 <vrow class="colheight-vrow">
-					<vcol span="23" class="colright">风格</vcol>
-					<vcol span="23" class="colright">大小</vcol>
-					<vcol span="23">造价</vcol>
+					<vcol span="22" class="colright">风格</vcol>
+					<vcol span="22" class="colright">大小</vcol>
+					<vcol span="22">造价</vcol>
 				</vrow>
 				<vrow>
-					<vcol span="23" class="colright">{{content.keywords}}</vcol>
-					<vcol span="23" class="colright">{{content.area}}</vcol>
-					<vcol span="23">{{content.price}}</vcol>
+					<vcol span="22" class="colright">{{content.keywords}}</vcol>
+					<vcol span="22" class="colright">{{content.area}}</vcol>
+					<vcol span="22">{{content.price}}</vcol>
 				</vrow>
 		    </vcol>	
 		</vrow>

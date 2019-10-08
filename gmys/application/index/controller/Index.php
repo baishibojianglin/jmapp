@@ -30,11 +30,18 @@ class Index extends Controller
     public function designer()
     {
        $match_design['status']=1;
-       $designlist=Db::name('member')->where($match_design)->select();
+       $designlist=Db::name('member')->alias('a')->join('member_level b','b.level_id=a.level_id')->where($match_design)->select();
        return json($designlist);     
     } 
 
-
+    //设计师详情
+    public function designerdetail()
+    {
+       $list=$this->request->param();
+       $match_design['member_id']=$list['id'];
+       $designlist=Db::name('member')->alias('a')->join('member_level b','b.level_id=a.level_id')->where($match_design)->find();
+       return json($designlist);   
+    } 
 
 
     

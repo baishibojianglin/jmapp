@@ -5,12 +5,18 @@
 				   <image class="img" :src="item.avatar"></image>
 		    </vcol>	
 		    <vcol class="font28 lh5" span="65">
-				<vrow>
-                   <vcol span="50">姓名：{{item.member_name}}</vcol>
-				   <vcol span="15"><text class="red mr5 fw">{{item.level_id}}</text> 星级</vcol>
+				<vrow class="mt10">
+                   <vcol span="40" class="font32 fw">{{item.member_name}}</vcol>
+				   <vcol span="25"><text class="red mr5 fw designerlevel">{{item.level_name}}</text></vcol>
 				</vrow>
-				
+				<vrow class="mt10">擅长：{{item.advantage}}</vrow>	
+				<vrow class="mt10"></vrow>	
 		    </vcol>	
+			<vcol class="font28 lh5" span="100">
+                <navigator v-bind:url="'designerdetail?designerid='+item.member_id" open-type="navigate">
+				  <button type="primary">走进设计师</button>
+				</navigator>
+			</vcol>	
 		</vrow>
 	</view>
 </template>
@@ -66,6 +72,16 @@
 	.designright{
 		box-sizing:border-box;
 		padding: 10upx 5upx;
+	}
+	.designerlevel{
+		padding: 10upx 15upx;
+		background:-webkit-linear-gradient(left,#695648,#82858A); /* Safari 5.1 - 6.0 */
+		background:linear-gradient(left,#FFCA00,#FF6633);/*chrom*/
+		background:-ms-linear-gradient(left,#695648,#82858A);/* IE 10 */
+		background:-moz-linear-gradient(left,#695648,#82858A);/*火狐*/ 
+		background:-o-linear-gradient(left,#695648,#82858A); /* Opera 11.1 - 12.0 */
+		color:#fff;
+		border-radius: 10upx;
 	}
 
 
