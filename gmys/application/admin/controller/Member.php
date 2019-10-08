@@ -110,7 +110,7 @@ class Member extends Base
             }
             // 判断是否新增成功：获取id
             if ($id) {
-                return show(config('code.success'), '团队成员新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/member/index'], 201);
+                return show(config('code.success'), '团队成员新增成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/member/index'], 201);
             } else {
                 return show(config('code.error'), '团队成员新增失败', [], 403);
             }

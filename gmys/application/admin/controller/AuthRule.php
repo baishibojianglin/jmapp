@@ -111,7 +111,7 @@ class AuthRule extends Base
                 // 每次新增、更新或删除Auth规则时，必须删除指定session值（指定作用域的指定值）
                 session('_auth_list_' . $this->session_admin->admin_id . '2', null, config('admin.session_admin_scope'));
 
-                return show(config('code.success'), 'id = ' . $id . '的Auth规则新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/auth_rule/index'], 201);
+                return show(config('code.success'), 'id = ' . $id . '的Auth规则新增成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/auth_rule/index'], 201);
             } else {
                 return show(config('code.error'), 'Auth规则新增失败', [], 403);
             }
@@ -261,12 +261,12 @@ class AuthRule extends Base
             // 真删除
             $result = model('AuthRule')->destroy($id);
             if (!$result) {
-                return show(config('code.error'), '删除失败', ['url' => config('app.SERVER_NAME') . $this->module . '/auth_rule/index']);
+                return show(config('code.error'), '删除失败', ['url' => config('app.I_SERVER_NAME') . $this->module . '/auth_rule/index']);
             } else {
                 // 每次新增、更新或删除Auth规则时，必须删除指定session值（指定作用域的指定值）
                 session('_auth_list_' . $this->session_admin->admin_id . '2', null, config('admin.session_admin_scope'));
 
-                return show(config('code.success'), '删除成功', ['url' => config('app.SERVER_NAME') . $this->module . '/auth_rule/index']);
+                return show(config('code.success'), '删除成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/auth_rule/index']);
             }
         } else {
             return show(config('code.error'), '请求不合法', [], 400);

@@ -104,7 +104,7 @@ class SystemConfig extends Base
             ];
             model('Config')->saveAll($list);*/
 
-            return show(config('code.success'), '更新成功', ['url' => config('app.SERVER_NAME') . $this->module . '/system_config/siteInfo'], 201);
+            return show(config('code.success'), '更新成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/system_config/siteInfo'], 201);
         } else {
             return show(config('code.error'), '请求不合法', [], 400);
         }

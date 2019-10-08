@@ -140,7 +140,7 @@ class Article extends Base
             }
             // 判断是否新增成功：获取id
             if ($id) {
-                return show(config('code.success'), '文章新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/article/index'], 201);
+                return show(config('code.success'), '文章新增成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/article/index'], 201);
             } else {
                 return show(config('code.error'), '文章新增失败', [], 403);
             }

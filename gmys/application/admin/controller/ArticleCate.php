@@ -147,7 +147,7 @@ class ArticleCate extends Base
             }
             // 判断是否新增成功：获取id
             if ($id) {
-                return show(config('code.success'), '文章类别新增成功', ['url' => config('app.SERVER_NAME') . $this->module . '/article_cate/index'], 201);
+                return show(config('code.success'), '文章类别新增成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/article_cate/index'], 201);
             } else {
                 return show(config('code.error'), '文章类别新增失败', [], 403);
             }

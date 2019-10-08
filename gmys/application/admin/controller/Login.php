@@ -100,7 +100,7 @@ class Login extends Base
 
             // 存session
             session(config('admin.session_admin'), $admin_data, config('admin.session_admin_scope'));
-            return show(config('code.success'), '登录成功', ['url' => config('app.SERVER_NAME') . $this->module . '/Index/index']); //$this->success('登录成功', 'Index/index');
+            return show(config('code.success'), '登录成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/Index/index']); //$this->success('登录成功', 'Index/index');
         } else {
             return show(config('code.error'), '请求不合法', [], 400);
         }

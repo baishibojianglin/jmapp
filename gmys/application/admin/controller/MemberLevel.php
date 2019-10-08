@@ -106,7 +106,7 @@ class MemberLevel extends Base
             }
             // 判断是否新增成功：获取id
             if ($id) {
-                return show(config('code.success'), '团队成员等级新增成功', ['url' => 'parent'], 201); //['url' => config('app.SERVER_NAME') . $this->module . '/member_level/index']
+                return show(config('code.success'), '团队成员等级新增成功', ['url' => 'parent'], 201); //['url' => config('app.I_SERVER_NAME') . $this->module . '/member_level/index']
             } else {
                 return show(config('code.error'), '团队成员等级新增失败', [], 403);
             }
