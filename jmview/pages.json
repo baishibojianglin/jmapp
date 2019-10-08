@@ -27,6 +27,13 @@
 				"navigationBarTitleText": "设计师风采",
 				"navigationBarBackgroundColor": "#F8F8F8"
 			}
+		},
+		{
+			"path": "pages/index/about",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"navigationBarBackgroundColor": "#F8F8F8"
+			}
 		}
 		
 	],

@@ -10,8 +10,9 @@ class Index extends Controller
 
 	 //装饰风格文章列表
     public function index(){
-
-       $articlelist=Db::name('article')->where('status',4)->field('article_id,thumb,title,house_type,area,price,phone')->order('article_id desc')->select();     
+       $match['cate_type']=$_GET['typeid'];
+       $match['status']=4;
+       $articlelist=Db::name('article')->alias('a')->join('article_cate b','b.cate_id=a.cate_id')->where($match)->field('article_id,thumb,title,house_type,area,price,phone')->order('article_id desc')->select();
        return json($articlelist);
     }
 
@@ -43,6 +44,13 @@ class Index extends Controller
        return json($designlist);   
     } 
 
+
+    //关于我们
+    public function about()
+    {
+       $list=Db::name('config')->where('id',14)->find();
+       return json($list);   
+    } 
 
     
 }

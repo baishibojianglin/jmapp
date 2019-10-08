@@ -34,11 +34,11 @@
 			  liststatus:false
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			    //默认加载文章列表
 			     var self=this;
 				 uni.request({
-					url:this.$url+'index.php/index/Index/index',
+					url:this.$url+'index.php/index/Index/index'+'?typeid='+options.typeid,
 					method:'GET',
 					success:function(res){
 						if(res.data.length!=0){
