@@ -209,6 +209,9 @@ class Article extends Base
         // 传入的数据
         $param = input('param.');
 
+        // 获取更新成功前的文章缩略图thumb、发布时间publish_time
+        $article = model('Article')->field('thumb, publish_time')->find($id);
+
         // validate验证
         /*$validate = validate('Article');
         if (!$validate->check($param, [], '')) {
@@ -249,15 +252,17 @@ class Article extends Base
         }
         if (!empty($param['thumb'])) {
             $data['thumb'] = trim($param['thumb']);
-
-            // 获取更新成功前的文章缩略图thumb
-            $article = model('Article')->field('thumb')->find($id);
         }
         if (!empty($param['content'])) {
             $data['content'] = $param['content'];
         }
         if (isset($param['status'])) { // 不能用 !empty() ，否则 status = 0 时也判断为空
             $data['status'] = input('param.status', null, 'intval');
+
+            // 发布时间
+            if ($param['status'] == 4 && $article['publish_time'] == 0) {
+                $data['publish_time'] = time();
+            }
         }
 
         if (empty($data)) {

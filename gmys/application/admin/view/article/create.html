@@ -179,7 +179,7 @@
         var uploadInst = upload.render({
             elem: '#thumb' //绑定元素
             ,url: '{:url("admin/upload/uploadThumb")}' //上传接口
-            ,data: {name: "thumb", dir: "article"}
+            ,data: {name: "thumb", dir: "article", width: "370", height: "260"}
             ,field: 'thumb' // 设定文件域的字段名
             ,done: function(res){
                 //上传完毕回调
