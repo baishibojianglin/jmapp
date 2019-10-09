@@ -17,7 +17,7 @@
     <div class="layui-container">
       <div class="layui-row">
         <ul class="aboutab">
-          <li class="layui-this">公司简介</li><li>招贤纳士</li><li>发展历程</li>
+          <li class="layui-this">公司简介</li><li>招贤纳士</li><li>发展历程</li><li>设计团队</li>
         </ul>
         <div class="tabIntro">
           <div class="content">
@@ -95,6 +95,32 @@
             <li class="odd">
               <div class="cour-img"><img src="__STATIC__/layui_home/img/us_img8.png"></div>
             </li>
+          </ul>
+        </div>
+        <div class="tabCour">
+          <ul class="timeline">
+
+            <!--输出奇、偶数记录-->
+            {volist name="memberList" id="vo" mod="2"}
+            {eq name="mod" value="0"}<!--奇数-->
+            <li class="odd">
+              <div class="cour-img"><img src="/{$vo.avatar}"></div>
+              <div class="cour-panel layui-col-sm4 layui-col-lg5">
+                <p class="label">{$vo.member_name}</p>
+                <p>{$vo.advantage}</p>
+              </div>
+            </li>
+            {else/}<!--偶数-->
+            <li>
+              <div class="cour-img"><img src="/{$vo.avatar}"></div>
+              <div class="cour-panel layui-col-sm4 layui-col-sm-offset8 layui-col-lg5 layui-col-lg-offset7">
+                <p class="label">{$vo.member_name}</p>
+                <p>{$vo.advantage}</p>
+              </div>
+            </li>
+            {/eq}
+            {/volist}
+
           </ul>
         </div>
       </div>
