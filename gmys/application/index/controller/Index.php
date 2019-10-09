@@ -10,9 +10,9 @@ class Index extends Controller
 
 	 //装饰风格文章列表
     public function index(){
-       $match['cate_id'] = $_GET['typeid'];
-       $match['cate_type'] = 1;
-       $match['status'] = 4;
+       $match['a.cate_id'] = $_GET['typeid'];
+       $match['b.cate_type'] = 1;
+       $match['a.status'] = 4;
        $articlelist=Db::name('article')->alias('a')->join('article_cate b','b.cate_id=a.cate_id')->where($match)->field('article_id,thumb,title,house_type,area,price,phone')->order('article_id desc')->select();
        return json($articlelist);
     }
