@@ -1,0 +1,55 @@
+{include file="public/_meta" /}
+  <title>几米艺墅-动态</title>
+</head>
+<body>
+  <!-- nav部分 -->
+  {include file="public/_header" /}
+
+  <!-- banner部分 -->
+  <div class="banner news">
+    <div class="title">
+      <p>实时新闻</p>
+      <p class="en">Real-time News</p>
+    </div>
+  </div>
+  <!-- main -->
+  <div class="main-news">
+    <div class="layui-container">
+      <div class="layui-row layui-col-space20">
+        {volist name="newsList.data" id="vo"}
+        <div class="layui-col-lg6 content">
+          <div>
+            <div class="news-img"><a href="{:url('news/newsDetail', array('id' => $vo.article_id))}"><img src="/{$vo.thumb}"></a></div><div class="news-panel">
+              <strong><a href="{:url('news/newsDetail', array('id' => $vo.article_id))}">{$vo.title}</a></strong>
+              <p class="detail"><span>{$vo.article_abstract}</span><a href="{:url('news/newsDetail', array('id' => $vo.article_id))}">[详细]</a></p>
+              <p class="read-push">阅读 <span>{$vo.views}</span>&nbsp;&nbsp;&nbsp;&nbsp;发布时间：<span>{$vo.publish_time}</span></p>
+            </div>
+          </div>
+        </div>
+        {/volist}
+      </div>
+      <div id="newsPage"></div>
+    </div>
+  </div>
+
+  <!-- footer部分 -->
+  {include file="public/_footer" /}
+
+  <script>
+    /**
+     * 分页模块 - layui.laypage
+     */
+    layui.use('laypage', function(){
+      var laypage = layui.laypage;
+
+      // 新闻/动态分页
+      laypage.render({
+        elem: 'newsPage' //注意，这里的 test1 是 ID，不用加 # 号
+        ,count: '{$newsList.total}' //数据总数，从服务端得到
+        ,theme: '#2db5a3'
+        ,layout: ['page', 'next']
+      });
+    });
+  </script>
+</body>
+</html>

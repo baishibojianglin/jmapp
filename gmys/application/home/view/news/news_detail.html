@@ -1,0 +1,28 @@
+{include file="public/_meta" /}
+  <title>几米艺墅-动态详情页</title>
+  <style>
+    .content{  font-size: 18px; line-height: 42px; text-align: justify; padding: 40px 0 102px 0;  }
+  </style>
+</head>
+<body>
+  <!-- nav部分 -->
+  {include file="public/_header" /}
+
+  <!-- main部分 -->
+  <div class="main-newsdate">
+    <div class="layui-container">
+      <p class="news"><a href="{:url('news/news')}">实时新闻</a> > 新闻详情</p>
+      <h1>{$newsData.title}</h1>
+      <p class="pushtime">发布时间：<span>{$newsData.publish_time}</span></p>
+      <p class="introTop">{$newsData.article_abstract}</p>
+      <!--<div><img src="__STATIC__/layui_home/img/news_big.jpg" alt="新闻详情图"></div>
+      <p class="introBott">{$newsData.content}</p>-->
+      <div class="content">{$newsData.content}</div>
+    </div>
+  </div>
+
+  <!-- footer部分 -->
+  {include file="public/_footer" /}
+
+</body>
+</html>

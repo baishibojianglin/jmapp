@@ -1,0 +1,51 @@
+{include file="public/_meta" /}
+  <title>几米艺墅-案例</title>
+</head>
+<body>
+  <!-- nav部分 -->
+  {include file="public/_header" /}
+
+  <!-- banner部分 -->
+  <div class="banner case">
+    <div class="title">
+      <p>成功案例</p>
+      <p class="en">Successful Case</p>
+    </div>
+  </div>
+  <!-- main部分 -->
+  <div class="main-case">
+    <div class="layui-container">
+      <div class="layui-row">
+        {volist name="caseList.data" id="vo"}
+        <div class="layui-inline content">
+          <div class="layui-inline case-img"><img src="/{$vo.thumb}"></div>
+          <p class="lable">{$vo.title}</p>
+          <p>{$vo.article_abstract}</p>
+        </div>
+        {/volist}
+      </div>
+      <div id="casePage"></div>
+    </div>
+  </div>
+
+  <!-- footer部分 -->
+  {include file="public/_footer" /}
+
+  <script>
+    /**
+     * 分页模块 - layui.laypage
+     */
+    layui.use('laypage', function(){
+      var laypage = layui.laypage;
+
+      // 案例分页
+      laypage.render({
+        elem: 'casePage' //注意，这里的 test1 是 ID，不用加 # 号
+        ,count: '{$caseList.total}' //数据总数，从服务端得到
+        ,theme: '#2db5a3'
+        ,layout: ['page', 'next']
+      });
+    });
+  </script>
+</body>
+</html>

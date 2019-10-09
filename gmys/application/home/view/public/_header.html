@@ -1,0 +1,23 @@
+<!-- nav部分 -->
+<div class="nav index">
+    <div class="layui-container">
+        <!-- 公司logo -->
+        <div class="nav-logo">
+            <a href="{:url('index/index')}">
+                <img src="{if condition='!empty($siteInfo.site_logo)'}/{$siteInfo.site_logo}{else /}__STATIC__/layui_home/img/logo.png{/if}" alt="几米艺墅">
+            </a>
+        </div>
+        <div class="nav-list">
+            <button>
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="layui-nav" lay-filter="">
+                <li class="layui-nav-item"><a href="{:url('index/index')}">首页</a></li>
+                <!--<li class="layui-nav-item"><a href="product.html">产品</a></li>-->
+                <li class="layui-nav-item"><a href="{:url('news/news')}">动态</a></li>
+                <li class="layui-nav-item"><a href="{:url('sample/index')}">案例</a></li>
+                <li class="layui-nav-item"><a href="{:url('about/about')}">关于</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
