@@ -81,9 +81,9 @@
         {volist name="caseList" id="vo"}
         <div class="layui-col-sm6">
           <div class="content">
-            <div class="content-left"><img src="/{$vo.thumb}"></div>
+            <div class="content-left"><a href="{:url('sample/sampleDetail', array('id' => $vo.article_id))}"><img src="/{$vo.thumb}"></a></div>
             <div class="content-right">
-              <p class="label">{$vo.title}</p>
+              <p class="label"><a href="{:url('sample/sampleDetail', array('id' => $vo.article_id))}">{$vo.title}</a></p>
               <span></span>
               <p>{$vo.article_abstract}</p>
             </div>

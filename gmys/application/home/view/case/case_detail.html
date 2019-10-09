@@ -1,5 +1,5 @@
 {include file="public/_meta" /}
-  <title>几米艺墅-动态详情</title>
+  <title>几米艺墅-案例详情</title>
   <style>
     .content{  font-size: 18px; line-height: 42px; text-align: justify; padding: 40px 0 102px 0;  }
   </style>
@@ -11,13 +11,13 @@
   <!-- main部分 -->
   <div class="main-newsdate">
     <div class="layui-container">
-      <p class="news"><a href="{:url('news/news')}">实时新闻</a> > 新闻详情</p>
-      <h1>{$newsData.title}</h1>
-      <p class="pushtime">发布时间：<span>{$newsData.publish_time}</span></p>
-      <p class="introTop">{$newsData.article_abstract}</p>
+      <p class="news"><a href="{:url('sample/index')}">设计案例</a> > 案例详情</p>
+      <h1>{$caseData.title}</h1>
+      <p class="pushtime">发布时间：<span>{$caseData.publish_time}</span></p>
+      <p class="introTop">{$caseData.article_abstract}</p>
       <!--<div><img src="__STATIC__/layui_home/img/news_big.jpg" alt="新闻详情图"></div>
-      <p class="introBott">{$newsData.content}</p>-->
-      <div class="content">{$newsData.content}</div>
+      <p class="introBott">{$caseData.content}</p>-->
+      <div class="content">{$caseData.content}</div>
     </div>
   </div>
 

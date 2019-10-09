@@ -1,6 +1,7 @@
 <?php
 
 namespace app\home\controller;
+use app\common\lib\exception\ApiException;
 
 /**
  * Class Sample
@@ -55,6 +56,46 @@ class Sample extends Base
             $data = model('Article')->getArticle($map, $this->size);
 
             return $data;
+        }
+    }
+
+    /**
+     * 案例详情
+     * @return \think\response\View
+     */
+    public function sampleDetail($id)
+    {
+        // 显示指定的新闻资源
+        $caseData = $this->read($id);
+        $caseData = json_decode(json_encode($caseData), true);
+        // 发布时间
+        $caseData['publish_time'] = date('Y-m-d', $caseData['publish_time']);
+
+        // 更新浏览量views
+        @model('Article')->where('article_id', $id)->setInc('views');
+
+        return view('case/case_detail', ['caseData' => $caseData]);
+    }
+
+    /**
+     * 显示指定的案例资源
+     * @param int $id
+     * @return \think\response\Json
+     * @throws ApiException
+     */
+    public function read($id)
+    {
+        // 判断为GET请求
+        if (request()->isGet()) {
+            try {
+                $data = model('Article')->find($id);
+            } catch (\Exception $e) {
+                throw new ApiException($e->getMessage(), 500, config('code.error'));
+            }
+
+            if ($data) {
+                return $data;
+            }
         }
     }
 }

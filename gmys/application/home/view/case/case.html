@@ -18,8 +18,8 @@
       <div class="layui-row">
         {volist name="caseList.data" id="vo"}
         <div class="layui-inline content">
-          <div class="layui-inline case-img"><img src="/{$vo.thumb}"></div>
-          <p class="lable">{$vo.title}</p>
+          <div class="layui-inline case-img"><a href="{:url('sample/sampleDetail', array('id' => $vo.article_id))}"><img src="/{$vo.thumb}"></a></div>
+          <p class="lable"><a href="{:url('sample/sampleDetail', array('id' => $vo.article_id))}">{$vo.title}</a></p>
           <p>{$vo.article_abstract}</p>
         </div>
         {/volist}
