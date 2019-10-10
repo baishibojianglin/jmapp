@@ -1,5 +1,7 @@
 <?php
+
 namespace app\index\controller;
+
 use think\Controller;
 use think\Db;
 use think\Request;
@@ -8,11 +10,11 @@ use think\Request;
 class Index extends Controller
 {   
 
-	 //装饰风格文章列表
+    //装饰风格文章列表
     public function index(){
        $match['a.cate_id'] = $_GET['typeid'];
-       $match['b.cate_type'] = 1;
-       $match['a.status'] = 4;
+       $match['b.cate_type'] = 1; // 类别分组：1微信公众号菜单
+       $match['a.status'] = 4; // 文章状态：4发布
        $articlelist=Db::name('article')->alias('a')->join('article_cate b','b.cate_id=a.cate_id')->where($match)->field('article_id,thumb,title,house_type,area,price,phone')->order('article_id desc')->select();
        return json($articlelist);
     }
@@ -51,9 +53,6 @@ class Index extends Controller
     {
        $list=Db::name('config')->where('id',14)->find();
        return json($list);   
-    } 
+    }
 
-    
 }
-
-
