@@ -14,6 +14,7 @@ use think\Request;
 class ArticleCate extends Base
 {
     private $cateType = []; // 文章类别分组
+    private $cateIds = [1, 2, 3, 4, 5]; // 定义主键 cate_id “1现代风格，2中式风格，3美式风格，4欧式风格，5地中海风”为默认的微信公众号菜单
 
     /**
      * 初始化
@@ -131,12 +132,20 @@ class ArticleCate extends Base
             $data = input('post.');
 
             // validate验证
-            /*$validate = validate('ArticleCate');
+            $validate = validate('ArticleCate');
             if (!$validate->check($data)) {
                 return show(config('code.error'), $validate->getError(), [], 403);
-            }*/
+            }
 
             // TODO：处理数据
+            // 判断微信公众号菜单数量
+            if ($data['cate_type'] == 1) {
+                // 微信公众号菜单计数
+                $cateTypeCount = model('ArticleCate')->where('cate_type', 1)->count();
+                if ($cateTypeCount >= 5) {
+                    return show(config('code.error'), '微信公众号菜单已满，请选择其他分组', [], 403);
+                }
+            }
 
             // 新增
             // 捕获异常
@@ -147,6 +156,10 @@ class ArticleCate extends Base
             }
             // 判断是否新增成功：获取id
             if ($id) {
+                // 新增时，如果主键 cate_id 为“1现代风格，2中式风格，3美式风格，4欧式风格，5地中海风”，则默认更新类别分组为微信公众号菜单 cate_type = 1
+                if (in_array($id, $this->cateIds)) {
+                    @model('ArticleCate')->save(['cate_type' => 1], ['cate_id' => $id]);
+                }
                 return show(config('code.success'), '文章类别新增成功', ['url' => config('app.I_SERVER_NAME') . $this->module . '/article_cate/index'], 201);
             } else {
                 return show(config('code.error'), '文章类别新增失败', [], 403);
@@ -201,12 +214,13 @@ class ArticleCate extends Base
     {
         // 传入的数据
         $param = input('param.');
+        $param['cate_id'] = $id; // 传入主键：为了忽略唯一(unique)类型字段cate_name对自身数据的唯一性验证，但不影响不同主键之间的cate_name唯一性验证
 
         // validate验证
-        /*$validate = validate('ArticleCate');
-        if (!$validate->check($param, [], '')) {
+        $validate = validate('ArticleCate');
+        if (!$validate->check($param)) {
             return show(config('code.error'), $validate->getError(), [], 403);
-        }*/
+        }
 
         // 判断数据是否存在
         $data = [];
@@ -217,6 +231,15 @@ class ArticleCate extends Base
             $data['cate_alias'] = trim($param['cate_alias']);
         }
         if (isset($param['cate_type'])) {
+            // 主键 cate_id “1现代风格，2中式风格，3美式风格，4欧式风格，5地中海风”为默认的微信公众号菜单，禁止更新
+            if (in_array($id, $this->cateIds) && ($param['cate_type'] != 1)) {
+                return show(config('code.error'), '禁止更新微信公众号菜单分组', [], 403);
+            }
+            // 非微信公众号菜单分组的其他主键 cate_id，禁止更新为微信公众号菜单分组 cate_type = 1
+            if (!in_array($id, $this->cateIds) && ($param['cate_type'] == 1)) {
+                return show(config('code.error'), '微信公众号菜单已满，请选择其他分组', [], 403);
+            }
+
             $data['cate_type'] = $param['cate_type'];
         }
         if (isset($param['parent_id'])) {
@@ -260,29 +283,49 @@ class ArticleCate extends Base
      */
     public function delete($id)
     {
-        // 显示指定的店鋪比赛场次模板
-        try {
-            $data = model('ArticleCate')->find($id);
-            //return show(config('code.success'), 'ok', $data);
-        } catch (\Exception $e) {
-            throw new ApiException($e->getMessage(), 500, config('code.error'));
-        }
+        // 判断为DELETE请求
+        if (request()->isDelete()) {
+            // 显示指定的店鋪比赛场次模板
+            try {
+                $data = model('ArticleCate')->find($id);
+                //return show(config('code.success'), 'ok', $data);
+            } catch (\Exception $e) {
+                throw new ApiException($e->getMessage(), 500, config('code.error'));
+            }
 
-        // 判断数据是否存在
-        if ($data['cate_id'] != $id) {
-            return show(config('code.error'), '数据不存在');
-        }
+            // 判断数据是否存在
+            if ($data['cate_id'] != $id) {
+                return show(config('code.error'), '数据不存在');
+            }
 
-        // 真删除
-        if ($data['status'] == config('code.status_disable') && empty($data['rules'])) {
-            $result = model('ArticleCate')->destroy($id);
+            // 判断删除条件
+            // 查询是否已有案例文章配置该类别
+            @$articleList = db('article')->where('cate_id', $id)->select();
+            if (0 != count(@$articleList)) {
+                return show(config('code.error'), '删除失败：已有案例文章配置该类别', ['url' => 'deleteFalse']);
+            }
+            // 判断类别分组是否为微信公众号菜单
+            if (1 == $data['cate_type']) {
+                return show(config('code.error'), '删除失败：禁止删除微信公众号菜单', ['url' => 'deleteFalse']);
+            }
+            // 判断类别是否导航显示
+            if (1 == $data['show_in_nav']) {
+                return show(config('code.error'), '删除失败：类别已导航显示', ['url' => 'deleteFalse']);
+            }
+
+            // 真删除
+            try {
+                $result = model('ArticleCate')->destroy($id);
+            } catch (\Exception $e) {
+                throw new ApiException($e->getMessage(), 500, config('code.error'));
+            }
             if (!$result) {
-                return show(config('code.error'), '删除失败');
+                return show(config('code.error'), '删除失败', ['url' => 'deleteFalse']);
             } else {
-                return show(config('code.success'), '删除成功');
+                return show(config('code.success'), '删除成功', ['url' => 'delete']);
             }
         } else {
-            return show(config('code.error'), '删除失败：用户组启用或用户组规则不为空');
+            return show(config('code.error'), '请求不合法', [], 400);
         }
     }
 }
