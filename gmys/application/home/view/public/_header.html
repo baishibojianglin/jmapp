@@ -3,7 +3,7 @@
     <div class="layui-container">
         <!-- 公司logo -->
         <div class="nav-logo">
-            <a href="{:url('index/index')}">
+            <a href="http://{$_SERVER['SERVER_NAME']}">
                 <img src="{if condition='!empty($siteInfo.site_logo)'}/{$siteInfo.site_logo}{else /}__STATIC__/layui_home/img/logo.png{/if}" alt="几米艺墅">
             </a>
         </div>
