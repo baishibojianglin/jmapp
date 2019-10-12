@@ -42,10 +42,30 @@
 					uni.navigateTo({
 					    url:options.aim
 					});
-					if(options.typeid==1){
 
-					}
                     if(options.aim='index'){
+						
+						//设置标题
+						if(options.typeid==1){
+						   this.title='现代风格';
+						}
+						if(options.typeid==2){
+						   this.title='中式风格';
+						}	
+						if(options.typeid==3){
+						   this.title='美式风格';
+						}	
+						if(options.typeid==4){
+						   this.title='欧式风格';
+						}
+						if(options.typeid==5){
+						   this.title='地中海风';
+						}				
+						
+						uni.setNavigationBarTitle({
+						    title: this.title
+						});
+						
 						 //默认加载文章列表
 						 uni.request({
 							url:this.$url+'index.php/index/Index/index'+'?typeid='+options.typeid,
