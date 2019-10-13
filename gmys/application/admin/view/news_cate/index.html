@@ -114,6 +114,7 @@
                         obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                         layer.close(index);
                         //向服务端发送删除指令
+                        ajaxRequest('{:url("admin/news_cate/delete")}', 'delete', {id: data.cate_id}); // ajax请求
                     });
                 } else if(layEvent === 'edit'){ //编辑
                     //do something
@@ -182,11 +183,6 @@
     <!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>--><!--注意：属性 lay-event="" 是模板的关键所在，值可随意定义。-->
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-
-    <!-- 这里同样支持 laytpl 语法，如： -->
-    {{#  if(d.auth > 2){ }}
-    <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
-    {{#  } }}
 </script>
 <!--toolbar - 绑定工具条模板 e-->
 
