@@ -59,8 +59,8 @@ class SystemConfig extends Base
             // 遍历传入的参数 $param，获取参数的键名 $key（`name`字段的值） 和值 $value（`value`字段的值）
             foreach ($param as $key => $value) {
 
-                // 判断传入的参数 $param 的值 $param[$key] 即 $value 不为空时，执行更新或新增
-                if (!empty($value)) {
+                // 判断传入的参数 $param 设置了键名 $key 时，执行更新或新增
+                if (isset($key)) {
 
                     // 遍历更新前的网站信息 $data，获取键名 $k（`name`字段的值） 和值 $v（`value`字段的值）
                     $k_arr = [];
