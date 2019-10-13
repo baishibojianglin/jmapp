@@ -232,29 +232,53 @@ class Member extends Base
      */
     public function delete($id)
     {
-        // 显示指定的店鋪比赛场次模板
-        try {
-            $data = model('Member')->find($id);
-            //return show(config('code.success'), 'ok', $data);
-        } catch (\Exception $e) {
-            throw new ApiException($e->getMessage(), 500, config('code.error'));
-        }
+        // 判断为DELETE请求
+        if (request()->isDelete()) {
+            // 显示指定的团队成员
+            try {
+                $data = model('Member')->find($id);
+                //return show(config('code.success'), 'ok', $data);
+            } catch (\Exception $e) {
+                throw new ApiException($e->getMessage(), 500, config('code.error'));
+            }
 
-        // 判断数据是否存在
-        if ($data['member_id'] != $id) {
-            return show(config('code.error'), '数据不存在');
-        }
+            // 判断数据是否存在
+            if ($data['member_id'] != $id) {
+                return show(config('code.error'), '数据不存在');
+            }
 
-        // 真删除
-        if ($data['status'] == config('code.status_disable') && empty($data['rules'])) {
-            $result = model('Member')->destroy($id);
-            if (!$result) {
-                return show(config('code.error'), '删除失败');
-            } else {
-                return show(config('code.success'), '删除成功');
+            // 判断删除条件：用户状态
+            if (config('code.status_enable') == $data['status']) {
+                return show(config('code.error'), '删除失败：团队成员已启用', ['url' => 'deleteFalse']);
+            }
+
+            // 软删除
+            if ($data['is_delete'] != config('code.is_delete')) {
+                // 捕获异常
+                try {
+                    $result = model('Member')->softDelete('member_id', $id);
+                } catch (\Exception $e) {
+                    throw new ApiException($e->getMessage(), 500, config('code.error'));
+                }
+
+                if (!$result) {
+                    return show(config('code.error'), '移除失败', ['url' => 'parent']);
+                } else {
+                    return show(config('code.success'), '移除成功', ['url' => 'delete']);
+                }
+            }
+
+            // 真删除
+            if ($data['is_delete'] == config('code.is_delete')) {
+                $result = model('Member')->destroy($id);
+                if (!$result) {
+                    return show(config('code.error'), '删除失败');
+                } else {
+                    return show(config('code.success'), '删除成功');
+                }
             }
         } else {
-            return show(config('code.error'), '删除失败：用户组启用或用户组规则不为空');
+            return show(config('code.error'), '请求不合法', [], 400);
         }
     }
 }
