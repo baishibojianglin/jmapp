@@ -14,7 +14,7 @@
 		    </vcol>	
 			<vcol class="font28 lh5" span="100">
                 <navigator v-bind:url="'designerdetail?designerid='+item.member_id" open-type="navigate">
-				  <button type="primary">走进设计师</button>
+				  <button type="primary" class="designerlevel">走近设计师</button>
 				</navigator>
 			</vcol>	
 		</vrow>

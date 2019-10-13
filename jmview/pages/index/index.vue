@@ -31,34 +31,59 @@
 		data() {
 			return {
 		      article_list:[],
-			  liststatus:false
+			  liststatus:false,
+			  title:''
 			}
 		},
 		onLoad(options) {
 
-				var self=this;
-				if(options.typeid==6){
+				   var self=this;
+				
 					uni.navigateTo({
-					    url:'designer'
+					    url:options.aim
 					});
-				}else{
-					 //默认加载文章列表
-					 uni.request({
-						url:this.$url+'index.php/index/Index/index'+'?typeid='+options.typeid,
-						method:'GET',
-						success:function(res){
-							if(res.data.length!=0){
-								self.article_list=res.data;
-								let article_long=self.article_list.length;
-								for(let i=0;i<article_long;i++){
-									self.article_list[i].thumb=self.$url+res.data[i].thumb.replace(/\\/g, "/");
-								}
-							}else{
-								self.liststatus=true;
-							}
+
+                    if(options.aim='index'){
+						
+						//设置标题
+						if(options.typeid==1){
+						   this.title='现代风格';
 						}
-					 }) 
-			    }
+						if(options.typeid==2){
+						   this.title='中式风格';
+						}	
+						if(options.typeid==3){
+						   this.title='美式风格';
+						}	
+						if(options.typeid==4){
+						   this.title='欧式风格';
+						}
+						if(options.typeid==5){
+						   this.title='地中海风';
+						}				
+						
+						uni.setNavigationBarTitle({
+						    title: this.title
+						});
+						
+						 //默认加载文章列表
+						 uni.request({
+							url:this.$url+'index.php/index/Index/index'+'?typeid='+options.typeid,
+							method:'GET',
+							success:function(res){
+								if(res.data.length!=0){
+									self.article_list=res.data;
+									let article_long=self.article_list.length;
+									for(let i=0;i<article_long;i++){
+										self.article_list[i].thumb=self.$url+res.data[i].thumb.replace(/\\/g, "/");
+									}
+								}else{
+									self.liststatus=true;
+								}
+							}
+						 }) 
+					}
+			    
 				
 				
 		},
