@@ -315,16 +315,35 @@ class Article extends Base
             return show(config('code.error'), '数据不存在');
         }
 
+        // 判断删除条件：文章状态
+        if (in_array($data['status'], [1, 2, 4])) {
+            return show(config('code.error'), '删除失败：文章待审核、审核通过或已发布', ['url' => 'deleteFalse']);
+        }
+
+        // 软删除
+        if ($data['is_delete'] != config('code.is_delete')) {
+            // 捕获异常
+            try {
+                $result = model('Article')->softDelete('article_id', $id);
+            } catch (\Exception $e) {
+                throw new ApiException($e->getMessage(), 500, config('code.error'));
+            }
+
+            if (!$result) {
+                return show(config('code.error'), '移除失败', ['url' => 'parent']);
+            } else {
+                return show(config('code.success'), '移除成功', ['url' => 'delete']);
+            }
+        }
+
         // 真删除
-        if ($data['status'] == config('code.status_disable') && empty($data['rules'])) {
+        if ($data['is_delete'] == config('code.is_delete')) {
             $result = model('Article')->destroy($id);
             if (!$result) {
                 return show(config('code.error'), '删除失败');
             } else {
                 return show(config('code.success'), '删除成功');
             }
-        } else {
-            return show(config('code.error'), '删除失败：用户组启用或用户组规则不为空');
         }
     }
 }

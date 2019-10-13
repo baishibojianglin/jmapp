@@ -285,7 +285,7 @@ class ArticleCate extends Base
     {
         // 判断为DELETE请求
         if (request()->isDelete()) {
-            // 显示指定的店鋪比赛场次模板
+            // 显示指定的文章类别
             try {
                 $data = model('ArticleCate')->find($id);
                 //return show(config('code.success'), 'ok', $data);
@@ -311,6 +311,11 @@ class ArticleCate extends Base
             // 判断类别是否导航显示
             if (1 == $data['show_in_nav']) {
                 return show(config('code.error'), '删除失败：类别已导航显示', ['url' => 'deleteFalse']);
+            }
+            // 判断类别是否有子分类
+            @$sonArticleCateList = db('articleCate')->where('parent_id', $id)->select();
+            if (0 != count(@$sonArticleCateList)) {
+                return show(config('code.error'), '删除失败：该类别包含子分类', ['url' => 'deleteFalse']);
             }
 
             // 真删除

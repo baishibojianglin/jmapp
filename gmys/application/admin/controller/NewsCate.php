@@ -260,29 +260,50 @@ class NewsCate extends Base
      */
     public function delete($id)
     {
-        // 显示指定的店鋪比赛场次模板
-        try {
-            $data = model('NewsCate')->find($id);
-            //return show(config('code.success'), 'ok', $data);
-        } catch (\Exception $e) {
-            throw new ApiException($e->getMessage(), 500, config('code.error'));
-        }
+        // 判断为DELETE请求
+        if (request()->isDelete()) {
+            // 显示指定的新闻类别
+            try {
+                $data = model('NewsCate')->find($id);
+                //return show(config('code.success'), 'ok', $data);
+            } catch (\Exception $e) {
+                throw new ApiException($e->getMessage(), 500, config('code.error'));
+            }
 
-        // 判断数据是否存在
-        if ($data['cate_id'] != $id) {
-            return show(config('code.error'), '数据不存在');
-        }
+            // 判断数据是否存在
+            if ($data['cate_id'] != $id) {
+                return show(config('code.error'), '数据不存在');
+            }
 
-        // 真删除
-        if ($data['status'] == config('code.status_disable') && empty($data['rules'])) {
-            $result = model('NewsCate')->destroy($id);
+            // 判断删除条件
+            // 查询是否已有新闻动态配置该类别
+            @$newsList = db('news')->where('cate_id', $id)->select();
+            if (0 != count(@$newsList)) {
+                return show(config('code.error'), '删除失败：已有新闻动态配置该类别', ['url' => 'deleteFalse']);
+            }
+            // 判断类别是否导航显示
+            if (1 == $data['show_in_nav']) {
+                return show(config('code.error'), '删除失败：类别已导航显示', ['url' => 'deleteFalse']);
+            }
+            // 判断类别是否有子分类
+            @$sonNewsCateList = db('NewsCate')->where('parent_id', $id)->select();
+            if (0 != count(@$sonNewsCateList)) {
+                return show(config('code.error'), '删除失败：该类别包含子分类', ['url' => 'deleteFalse']);
+            }
+
+            // 真删除
+            try {
+                $result = model('NewsCate')->destroy($id);
+            } catch (\Exception $e) {
+                throw new ApiException($e->getMessage(), 500, config('code.error'));
+            }
             if (!$result) {
-                return show(config('code.error'), '删除失败');
+                return show(config('code.error'), '删除失败', ['url' => 'deleteFalse']);
             } else {
-                return show(config('code.success'), '删除成功');
+                return show(config('code.success'), '删除成功', ['url' => 'delete']);
             }
         } else {
-            return show(config('code.error'), '删除失败：用户组启用或用户组规则不为空');
+            return show(config('code.error'), '请求不合法', [], 400);
         }
     }
 }
