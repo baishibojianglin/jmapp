@@ -19,12 +19,16 @@ class Index extends Base
         $memberCountToday = model('Member')->where('create_time', 'between time', [$beginToday, $endToday])->count(); // 今日新增团队成员数
         $articleCount = model('Article')->count(); // 设计作品数
         $articleCountToday = model('Article')->where('create_time', 'between time', [$beginToday, $endToday])->count(); // 今日新增设计作品数
+        $newsCount = model('News')->count(); // 新闻动态数
+        $newsCountToday = model('News')->where('create_time', 'between time', [$beginToday, $endToday])->count(); // 今日新增新闻动态数
 
         return $this->fetch('', [
             'memberCount' => $memberCount,
             'memberCountToday' => $memberCountToday,
             'articleCount' => $articleCount,
             'articleCountToday' => $articleCountToday,
+            'newsCount' => $newsCount,
+            'newsCountToday' => $newsCountToday,
         ]);
     }
 }
