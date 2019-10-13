@@ -58,11 +58,14 @@ class News extends Base
             if (isset($param['cate_name'])) {
                 // 获取新闻类别 cate_id
                 $newsCate = db('news_cate')->field('cate_id')->where('cate_name', 'like', '%' . trim($param['cate_name']) . '%')->select();
-                $cate_ids = [];
+                $cate_ids = [0];
                 foreach ($newsCate as $key => $value) {
                     $cate_ids[] = $value['cate_id'];
                 }
                 $map['cate_id'] = ['in', $cate_ids]; // [NOT] IN 查询
+            }
+            if (isset($param['is_delete'])) {
+                $map['is_delete'] = $param['is_delete'];
             }
 
             // 获取分页page、size
@@ -316,9 +319,12 @@ class News extends Base
         if ($data['is_delete'] == config('code.is_delete')) {
             $result = model('News')->destroy($id);
             if (!$result) {
-                return show(config('code.error'), '删除失败');
+                return show(config('code.error'), '删除失败', ['url' => 'parent']);
             } else {
-                return show(config('code.success'), '删除成功');
+                // 删除文件
+                @unlink(ROOT_PATH . 'public' . DS . $data['thumb']);
+
+                return show(config('code.success'), '删除成功', ['url' => 'delete']);
             }
         }
     }

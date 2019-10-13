@@ -51,6 +51,9 @@ class Member extends Base
                 }
                 $map['m.level_id'] = ['in', $level_ids]; // [NOT] IN 查询
             }
+            if (isset($param['is_delete'])) {
+                $map['m.is_delete'] = $param['is_delete'];
+            }
 
             // 获取分页page、size
             $this->getPageAndSize($param);
@@ -272,9 +275,12 @@ class Member extends Base
             if ($data['is_delete'] == config('code.is_delete')) {
                 $result = model('Member')->destroy($id);
                 if (!$result) {
-                    return show(config('code.error'), '删除失败');
+                    return show(config('code.error'), '删除失败', ['url' => 'parent']);
                 } else {
-                    return show(config('code.success'), '删除成功');
+                    // 删除文件
+                    @unlink(ROOT_PATH . 'public' . DS . $data['avatar']);
+
+                    return show(config('code.success'), '删除成功', ['url' => 'delete']);
                 }
             }
         } else {

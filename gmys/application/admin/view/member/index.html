@@ -31,8 +31,9 @@
                                 <div class="layui-input-inline" style="width: 100px;">
                                     <input type="text" name="level_name" value="" autocomplete="off" class="layui-input">
                                 </div>
-                                <button class="layui-btn layui-btn-blue" onclick="layuiTable()">查询</button>
+                                <button class="layui-btn layui-btn-blue" onclick="layuiTable('{:config("code.not_delete")}')">查询</button>
                                 <!--<button class="layui-btn layui-btn-primary">重置</button>-->
+                                <button class="layui-btn layui-btn-primary" onclick="layuiTable('{:config("code.is_delete")}')"><i class="layui-icon layui-icon-delete"></i>回收站</button>
                             </div>
                         </div>
                     </div>
@@ -51,12 +52,12 @@
 <script>
 
     // 页面加载时执行
-    layuiTable();
+    layuiTable('{:config("code.not_delete")}');
 
     /**
      * layui.table 数据表格：初始化渲染方式为方法渲染
      */
-    function layuiTable() {
+    function layuiTable(is_delete) {
         layui.use('table', function () {
 
             var table = layui.table;
@@ -76,7 +77,7 @@
                 ]]
                 , url: '{:url("admin/member/getMember")}' //数据接口
                 //,method: 'get' // 接口http请求类型，默认：get
-                ,where: {member_name: $('input[name="member_name"]').val(), level_name: $('input[name="level_name"]').val()} // 接口的其它参数，此处为搜索条件
+                ,where: {member_name: $('input[name="member_name"]').val(), level_name: $('input[name="level_name"]').val(), is_delete: is_delete} // 接口的其它参数，此处为搜索条件
                 //,contentType: 'application/x-www-form-urlencoded'
                 , parseData: function (res) { //res 即为原始返回的数据
                     return {
@@ -162,6 +163,12 @@
 
                     // 向服务端发送更新指令：ajax请求
                     changeTableVal('member', 'member_id', data.member_id, 'status', data.status, this);
+                } else if (layEvent === 'recover') { // 还原回收站内容
+                    // 向服务端发送更新指令：ajax请求
+                    changeTableVal('member', 'member_id', data.member_id, 'is_delete', 0, this);
+
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
                 }
             });
 
@@ -184,14 +191,22 @@
 
 <!--toolbar - 绑定工具条模板，它可以存放在页面的任意位置 s-->
 <script type="text/html" id="barDemo">
+    <!--回收站不显示的按钮-->
+    {{#  if (d.is_delete == '{:config("code.not_delete")}') { }}
     <!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>--><!--注意：属性 lay-event="" 是模板的关键所在，值可随意定义。-->
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    {{#  } else { }}
+    <a class="layui-btn layui-btn-xs" lay-event="recover">还原</a>
+    {{#  } }}
+
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <!--toolbar - 绑定工具条模板 e-->
 
 <!--templet - 自定义列模板 s-->
 <script type="text/html" id="statusTpl">
+    <!--回收站不显示的按钮-->
+    {{#  if (d.is_delete == '{:config("code.not_delete")}') { }}
     <!--状态 s-->
     <a lay-event="updateStatus">
         {{#  if (1 == d.status) { }}
@@ -201,6 +216,7 @@
         {{#  } }}
     </a>
     <!--状态 e-->
+    {{#  } }}
 </script>
 <!--templet - 自定义列模板 e-->
 
