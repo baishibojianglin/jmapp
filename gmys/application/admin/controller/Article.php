@@ -290,7 +290,7 @@ class Article extends Base
             // 删除更新成功前的文章缩略图thumb文件
             if (!empty($param['thumb']) && trim($param['thumb']) != $article['thumb']) {
                 // 删除文件
-                unlink(ROOT_PATH . 'public' . DS . $article['thumb']);
+                @unlink(ROOT_PATH . 'public' . DS . $article['thumb']);
             }
 
             return show(config('code.success'), '更新成功', ['url' => 'parent'], 201);
