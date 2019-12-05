@@ -13,13 +13,13 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => '101.132.78.50',
+    'hostname'        => '127.0.0.1',
     // 数据库名
     'database'        => 'gmys',
     // 用户名
-    'username'        => 'gmys',
+    'username'        => 'root',
     // 密码
-    'password'        => '190916gmys@gmys',
+    'password'        => 'root',
     // 端口
     'hostport'        => '',
     // 连接dsn
