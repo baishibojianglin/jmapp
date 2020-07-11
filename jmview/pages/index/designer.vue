@@ -14,7 +14,7 @@
 		    </vcol>	
 			<vcol class="font28 lh5" span="100">
                 <navigator v-bind:url="'designerdetail?designerid='+item.member_id" open-type="navigate">
-				  <button type="primary" class="designerlevel">走近设计师</button>
+				  <button type="primary" class="designerlevel">关于设计师</button>
 				</navigator>
 			</vcol>	
 		</vrow>
@@ -76,7 +76,7 @@
 	.designerlevel{
 		padding: 10upx 15upx;
 		background:-webkit-linear-gradient(left,#695648,#82858A); /* Safari 5.1 - 6.0 */
-		background:linear-gradient(left,#FFCA00,#FF6633);/*chrom*/
+		background: rgb(132,133,135);/*chrom*//* linear-gradient(left,#FFCA00,#FF6633) */
 		background:-ms-linear-gradient(left,#695648,#82858A);/* IE 10 */
 		background:-moz-linear-gradient(left,#695648,#82858A);/*火狐*/ 
 		background:-o-linear-gradient(left,#695648,#82858A); /* Opera 11.1 - 12.0 */

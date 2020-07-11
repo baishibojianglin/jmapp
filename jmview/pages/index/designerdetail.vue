@@ -7,12 +7,12 @@
 			   </vrow>
 			   <vrow style="border-bottom:1px solid #ECECEC;padding:5upx 0;" class="font28">
 				   <vcol span="50" class="white" style="text-align:left;"><uni-icons style="color:#fff; margin-left: 10upx;" type="person" size="17"></uni-icons><text>{{content.member_name}}</text></vcol>
-				   <vcol span="50" class="white" style="text-align:right;"><uni-icons style="color:#fff;" type="phone" size="18"></uni-icons><text style="margin-right: 10upx;">{{content.phone}}</text></vcol>
+				   <vcol v-if="false" span="50" class="white" style="text-align:right;"><uni-icons style="color:#fff;" type="phone" size="18"></uni-icons><text style="margin-right: 10upx;">{{content.phone}}</text></vcol>
 			   </vrow>
 			   <vrow style="border-bottom:1px solid #ECECEC;color:#F7A200; padding: 10upx 0;" class="font28">
 				   <text style="margin: 10upx 20upx;">作品及奖项 : {{content.production}}</text>
 			   </vrow>
-		    </vcol>	
+		    </vcol>
 		</vrow>
 		<vrow>
 			<vcol span="100">
@@ -69,7 +69,7 @@
 	}
 	.borbottom{
 		background:-webkit-linear-gradient(left,#82858A,#695648); /* Safari 5.1 - 6.0 */
-		background:linear-gradient(top,#F5E100,#1DA261);/*chrom*/
+		background: rgb(132,133,135);/*chrom*//* linear-gradient(top,#F5E100,#1DA261) */
 		background:-ms-linear-gradient(left,#82858A,#695648);/* IE 10 */
 		background:-moz-linear-gradient(left,#82858A,#695648);/*火狐*/ 
 		background:-o-linear-gradient(left,#82858A,#695648); /* Opera 11.1 - 12.0 */
